@@ -48,11 +48,11 @@ module Rebundler
       @before.each do |node|
         case node.name
         when :source, :gemspec, :ruby
-          if node.arguments.nil?
-            chunks << node.message
-          else
-            chunks << "#{node.message} #{args_to_s(node.arguments.child_nodes)}"
-          end
+          chunks << if node.arguments.nil?
+                      node.message
+                    else
+                      "#{node.message} #{args_to_s(node.arguments.child_nodes)}"
+                    end
         end
       end
 

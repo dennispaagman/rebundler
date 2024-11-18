@@ -3,7 +3,7 @@
 require "rebundler"
 
 desc "Rebundle"
-task :rebundle, :file do |t, args|
+task :rebundle, :file do |_t, args|
   file = args[:file] || Dir.pwd + "/Gemfile"
   parser = Rebundler::Parser.new(file)
 

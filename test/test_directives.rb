@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class TestDirectives < Minitest::Test
@@ -33,6 +35,18 @@ class TestDirectives < Minitest::Test
     with_parsed_gemfile(gemfile) do |parser|
       assert_equal <<~GEMFILE, parser.write!
         ruby "3.2.0", engine: "ruby", engine_version: "3.2.0"
+      GEMFILE
+    end
+  end
+
+  def test_ruby_with_file_argument
+    gemfile = <<~GEMFILE
+      ruby file: ".ruby-version"
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.write!
+        ruby file: ".ruby-version"
       GEMFILE
     end
   end
