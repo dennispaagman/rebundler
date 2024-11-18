@@ -52,7 +52,7 @@ module Rebundler
           line << "  " if bl
 
           line << if args
-                    "gem \"#{dep.name}\", #{args_to_s(gem[:args])} # #{dep.summary}"
+                    "gem \"#{dep.name}\", #{args} # #{dep.summary}"
                   else
                     "gem \"#{dep.name}\" # #{dep.summary}"
                   end
@@ -79,25 +79,18 @@ module Rebundler
     def args_to_s(args)
       return if args.empty?
 
-      args.map do |arg|
-        case arg.type
-        when :keyword_hash_node
-          arg.elements.map do |element|
-            key = node_to_s(element.key)
-            value = node_to_s(element.value)
-
-            "#{key} #{value}"
-          end
-        when :string_node, :symbol_node, :array_node
-          node_to_s(arg)
-        else
-          raise NotImplementedError, "Unknown argument type: #{arg.type}"
-        end
-      end.join(", ")
+      args.map { node_to_s(_1) }.join(", ")
     end
 
     def node_to_s(node)
       case node.type
+      when :keyword_hash_node
+        node.elements.map do |element|
+          key = node_to_s(element.key)
+          value = node_to_s(element.value)
+
+          "#{key} #{value}"
+        end
       when :symbol_node
         "#{node.opening}#{node.value}#{node.closing}"
       when :string_node
