@@ -9,5 +9,5 @@ task :rebundle, :file do |_t, args|
 
   parser.parse!
 
-  puts parser.write!
+  File.write(file, parser.write!)
 end
