@@ -8,6 +8,7 @@ module Rebundler
 
     def initialize(file)
       @file = file
+      @before = []
       @blocks = [
         { block: nil, gems: [] } # the gems without a specific block
       ]
@@ -22,34 +23,51 @@ module Rebundler
           case node.name
           when :gem
             @blocks[0][:gems] << parse_gem(node)
+          when :gemspec, :ruby
+            @before << node
           when :group, :source, :git, :platforms, :path
-            block = { block: node, gems: [] }
+            if node.block
+              block = { block: node, gems: [] }
 
-            node.block.body.compact_child_nodes.each do |child|
-              block[:gems] << parse_gem(child)
+              node.block.body.compact_child_nodes.each do |child|
+                block[:gems] << parse_gem(child)
+              end
+
+              @blocks << block
+            else
+              @before << node
             end
-
-            @blocks << block
           end
         end
       end
     end
 
     def write!
-      lines = []
+      chunks = []
 
-      lines << @blocks.map do |block|
-        bl = block[:block]
+      @before.each do |node|
+        case node.name
+        when :source, :gemspec, :ruby
+          if node.arguments.nil?
+            chunks << node.message
+          else
+            chunks << "#{node.message} #{args_to_s(node.arguments.child_nodes)}"
+          end
+        end
+      end
+
+      @blocks.each do |block|
+        block_node = block[:block]
         block_lines = []
 
-        block_lines << "#{bl.message} #{args_to_s(bl.arguments.child_nodes)} do" if bl
+        block_lines << "#{block_node.message} #{args_to_s(block_node.arguments.child_nodes)} do" if block_node
 
         block[:gems].sort_by { _1[:gem].name }.each do |gem|
           dep = gem[:gem]
           args = args_to_s(gem[:args])
 
           line = +""
-          line << "  " if bl
+          line << "  " if block_node
 
           line << if args
                     "gem \"#{dep.name}\", #{args} # #{dep.summary}"
@@ -60,12 +78,12 @@ module Rebundler
           block_lines << line
         end
 
-        block_lines << "end" if bl
+        block_lines << "end" if block_node
 
-        block_lines.join("\n")
-      end.reject(&:empty?).join("\n\n")
+        chunks << block_lines.join("\n")
+      end
 
-      lines.join + "\n"
+      chunks.reject(&:empty?).join("\n\n") + "\n"
     end
 
     private

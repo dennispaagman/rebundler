@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-require "debug"
 
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+
+Bundler.require
+
 require "rebundler"
-
 require "minitest/autorun"
-
-Minitest::Test.make_my_diffs_pretty!
 
 def with_temporary_gemfile(content, &)
   file = Tempfile.new("Gemfile")
