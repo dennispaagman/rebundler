@@ -2,14 +2,14 @@
 
 require "test_helper"
 
-class TestRebundlerParser < Minitest::Test
+class TestParserGemVariants < Minitest::Test
   def test_gem_without_any_args
     gemfile = <<~GEMFILE
       gem "rubocop"
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -21,7 +21,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", require: false # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -33,7 +33,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", require: "rubocop" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -45,7 +45,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", require: ["rubocop", "rubocop/rspec"] # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -57,7 +57,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", source: "https://rubygems.org" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -69,7 +69,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", git: "https://github.com/rubocop/rubocop.git" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -81,7 +81,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", git: "https://github.com/rubocop/rubocop.git", branch: "main" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -93,7 +93,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", git: "https://github.com/rubocop/rubocop.git", tag: "v1.0.0" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -105,7 +105,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", git: "https://github.com/rubocop/rubocop.git", ref: "abc123" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -117,7 +117,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", git: "https://github.com/rubocop/rubocop.git", submodules: true # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -129,7 +129,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", github: "rubocop/rubocop" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -141,7 +141,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", gist: "e123456789abcdef0123456789abcdef" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -153,7 +153,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", path: "../rubocop" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -165,7 +165,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", group: :development # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -177,7 +177,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", groups: [:development, :test] # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -189,7 +189,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", platform: :jruby # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -201,7 +201,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", platforms: [:jruby, :mingw, :x64_mingw] # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -213,7 +213,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", force_ruby_platform: true # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -225,7 +225,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", platforms: %i[jruby mingw x64_mingw] # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -237,7 +237,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", platforms: %I(jruby mingw x64_mingw) # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -249,7 +249,7 @@ class TestRebundlerParser < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal parser.write!, <<~GEMFILE
+      assert_equal <<~GEMFILE, parser.write!
         gem "rubocop", platforms: %w[jruby mingw x64_mingw] # Automatic Ruby code style checking tool.
       GEMFILE
     end

@@ -4,40 +4,68 @@ require "prism"
 
 module Rebundler
   class Parser
+    attr_reader :blocks
+
     def initialize(file)
       @file = file
-      @gems = []
+      @blocks = [
+        { block: nil, gems: [] } # the gems without a specific block
+      ]
     end
 
     def parse!
-      queue = [Prism.parse(File.read(@file)).value]
+      parsed = Prism.parse(File.read(@file)).value
 
-      while (node = queue.shift)
+      parsed.compact_child_nodes[0].compact_child_nodes.each do |node|
         case node.type
         when :call_node
-          if node.name == :gem
-            gem_name = node.arguments.child_nodes[0].unescaped
+          case node.name
+          when :gem
+            @blocks[0][:gems] << parse_gem(node)
+          when :group, :source, :git, :platforms, :path
+            block = { block: node, gems: [] }
 
-            @gems << { gem: find_loaded_gem(gem_name), args: node.arguments.child_nodes[1..] }
+            node.block.body.compact_child_nodes.each do |child|
+              block[:gems] << parse_gem(child)
+            end
+
+            @blocks << block
           end
         end
-
-        queue.concat(node.compact_child_nodes)
       end
     end
 
     def write!
-      raise "UnparsedError" if @gems.empty?
-
       lines = []
 
-      @gems.sort_by { _1[:gem].name }.each do |gem|
-        dep = gem[:gem]
+      lines << @blocks.map do |block|
+        bl = block[:block]
+        block_lines = []
 
-        lines << "gem \"#{dep.name}\"#{args_to_s(gem[:args])} # #{dep.summary}"
-      end
+        block_lines << "#{bl.message} #{args_to_s(bl.arguments.child_nodes)} do" if bl
 
-      "#{lines.join("\n")}\n"
+        block[:gems].sort_by { _1[:gem].name }.each do |gem|
+          dep = gem[:gem]
+          args = args_to_s(gem[:args])
+
+          line = +""
+          line << "  " if bl
+
+          line << if args
+                    "gem \"#{dep.name}\", #{args_to_s(gem[:args])} # #{dep.summary}"
+                  else
+                    "gem \"#{dep.name}\" # #{dep.summary}"
+                  end
+
+          block_lines << line
+        end
+
+        block_lines << "end" if bl
+
+        block_lines.join("\n")
+      end.reject(&:empty?).join("\n\n")
+
+      lines.join + "\n"
     end
 
     private
@@ -51,7 +79,7 @@ module Rebundler
     def args_to_s(args)
       return if args.empty?
 
-      ", " + args.map do |arg|
+      args.map do |arg|
         case arg.type
         when :keyword_hash_node
           arg.elements.map do |element|
@@ -60,10 +88,10 @@ module Rebundler
 
             "#{key} #{value}"
           end
-        when :string_node
+        when :string_node, :symbol_node, :array_node
           node_to_s(arg)
         else
-          raise NotImplementedError
+          raise NotImplementedError, "Unknown argument type: #{arg.type}"
         end
       end.join(", ")
     end
@@ -85,8 +113,16 @@ module Rebundler
       when :false_node
         "false"
       else
-        raise NotImplementedError
+        raise NotImplementedError, "Unknown node type: #{node.type}"
       end
+    end
+
+    def parse_gem(node)
+      return unless node.type == :call_node && node.name == :gem
+
+      gem_name = node.arguments.child_nodes[0].content
+
+      { gem: find_loaded_gem(gem_name), args: node.arguments.child_nodes[1..] }
     end
   end
 end
