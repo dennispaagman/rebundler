@@ -2,6 +2,7 @@
 
 require_relative "rebundler/version"
 require_relative "rebundler/parser"
+require_relative "rebundler/catalogizer"
 
 require_relative "rebundler/railtie" if defined?(Rails)
 

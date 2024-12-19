@@ -62,20 +62,38 @@ module Rebundler
 
         block_lines << "#{block_node.message} #{args_to_s(block_node.arguments.child_nodes)} do" if block_node
 
-        block[:gems].sort_by { _1[:gem].name }.each do |gem|
-          dep = gem[:gem]
-          args = args_to_s(gem[:args])
+        # TODO: remove nil filter, add a fallback to grab data from rubygems.org for non loaded gems
+        grouped = block[:gems].filter { !_1[:gem].nil? }.group_by do |gem|
+          catalog.find do
+            _2.include?(gem[:gem].name)
+          end&.first
+        end.sort_by { |key, _| key.nil? ? "zzzz" : key }.to_h # very ugly hack to put nil last
 
-          line = +""
-          line << "  " if block_node
+        grouped.each do |group, gems|
+          if group
+            if block_node
+              block_lines << "  # #{group}"
+            elsif group
+              block_lines << "# #{group}"
+            end
+          end
 
-          line << if args
-                    "gem \"#{dep.name}\", #{args} # #{dep.summary}"
-                  else
-                    "gem \"#{dep.name}\" # #{dep.summary}"
-                  end
+          gems.sort_by { _1[:gem].name }.each do |gem|
+            dep = gem[:gem]
+            args = args_to_s(gem[:args])
 
-          block_lines << line
+            line = +""
+            line << "  " if block_node
+
+            line << if args
+                      "gem \"#{dep.name}\", #{args} # #{dep.summary}"
+                    else
+                      "gem \"#{dep.name}\" # #{dep.summary}"
+                    end
+
+            block_lines << line
+          end
+          block_lines << "" if group
         end
 
         block_lines << "end" if block_node
@@ -134,6 +152,10 @@ module Rebundler
       gem_name = node.arguments.child_nodes[0].content
 
       { gem: find_loaded_gem(gem_name), args: node.arguments.child_nodes[1..] }
+    end
+
+    def catalog
+      @catalog ||= Catalogizer.new.catalog
     end
   end
 end

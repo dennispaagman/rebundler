@@ -8,6 +8,9 @@ task :rebundle, :file do |_t, args|
   parser = Rebundler::Parser.new(file)
 
   parser.parse!
+  output = parser.write!
 
-  File.write(file, parser.write!)
+  puts output
+
+  File.write(file, output)
 end
