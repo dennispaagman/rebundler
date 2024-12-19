@@ -46,34 +46,22 @@ module Rebundler
       chunks = []
 
       @before.each do |node|
-        case node.name
-        when :source, :gemspec, :ruby
-          chunks << if node.arguments.nil?
-                      node.message
-                    else
-                      "#{node.message} #{args_to_s(node.arguments.child_nodes)}"
-                    end
-        end
+        chunks << node_to_s(node)
       end
 
       @blocks.each do |block|
         block_node = block[:block]
         block_lines = []
 
-        block_lines << "#{block_node.message} #{args_to_s(block_node.arguments.child_nodes)} do" if block_node
+        block_lines << "#{block_node.message} #{args_to_s(block_node.arguments)} do" if block_node
 
         block[:gems].sort_by { _1[:gem].name }.each do |gem|
           dep = gem[:gem]
-          args = args_to_s(gem[:args])
+          code = node_to_s(gem[:node])
 
           line = +""
           line << "  " if block_node
-
-          line << if args
-                    "gem \"#{dep.name}\", #{args} # #{dep.summary}"
-                  else
-                    "gem \"#{dep.name}\" # #{dep.summary}"
-                  end
+          line << "#{code} # #{dep.summary}"
 
           block_lines << line
         end
@@ -95,13 +83,15 @@ module Rebundler
     end
 
     def args_to_s(args)
-      return if args.empty?
+      return if args.nil? || args.child_nodes.empty?
 
-      args.map { node_to_s(_1) }.join(", ")
+      args.child_nodes.map { node_to_s(_1) }.join(", ")
     end
 
     def node_to_s(node)
       case node.type
+      when :call_node
+        "#{node.name} #{args_to_s(node.arguments)}".strip
       when :keyword_hash_node
         node.elements.map do |element|
           key = node_to_s(element.key)
@@ -133,7 +123,7 @@ module Rebundler
 
       gem_name = node.arguments.child_nodes[0].content
 
-      { gem: find_loaded_gem(gem_name), args: node.arguments.child_nodes[1..] }
+      { gem: find_loaded_gem(gem_name), node: }
     end
   end
 end
