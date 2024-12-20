@@ -4,7 +4,7 @@ require "prism"
 
 module Rebundler
   class Parser
-    attr_reader :file, :before, :blocks
+    attr_reader :file, :before, :blocks, :frozen_string_literal
 
     def initialize(file)
       @file = file
@@ -12,12 +12,15 @@ module Rebundler
       @blocks = [
         { block: nil, gems: [] } # the gems without a specific block
       ]
+      @frozen_string_literal = false
     end
 
     def parse!
-      parsed = Prism.parse(File.read(file)).value
+      parsed = Prism.parse(File.read(file))
 
-      parsed.compact_child_nodes[0].compact_child_nodes.each do |node|
+      @frozen_string_literal = true if parsed.magic_comments.map(&:key).include?("frozen_string_literal")
+
+      parsed.value.compact_child_nodes[0].compact_child_nodes.each do |node|
         case node.type
         when :call_node
           case node.name
@@ -44,6 +47,8 @@ module Rebundler
 
     def write!
       chunks = []
+
+      chunks << "# frozen_string_literal: true" if frozen_string_literal
 
       before.each do |node|
         chunks << node_to_s(node)

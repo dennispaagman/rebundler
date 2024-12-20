@@ -74,4 +74,20 @@ class TestDirectives < Minitest::Test
       GEMFILE
     end
   end
+
+  def test_frozen_string_literal
+    gemfile = <<~GEMFILE
+      # frozen_string_literal: true
+
+      gem "rubocop"
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.write!
+        # frozen_string_literal: true
+
+        gem "rubocop" # Automatic Ruby code style checking tool.
+      GEMFILE
+    end
+  end
 end
