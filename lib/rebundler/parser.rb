@@ -5,15 +5,15 @@ require "gems"
 
 module Rebundler
   class Parser
-    attr_reader :file, :before, :blocks, :frozen_string_literal
+    attr_reader :file, :before, :sets, :frozen_string_literal
 
     def initialize(file)
       @file = file
-      @before = []
-      @blocks = [
-        { block: nil, gems: [] } # the gems without a specific block
-      ]
       @frozen_string_literal = false
+      @before = []
+      @sets = [
+        { set: nil, gems: [] } # all gems outside a specific block (group, source, etc) will end up here
+      ]
     end
 
     def parse!
@@ -26,18 +26,18 @@ module Rebundler
         when :call_node
           case node.name
           when :gem
-            @blocks[0][:gems] << parse_gem(node)
+            @sets[0][:gems] << parse_gem(node)
           when :gemspec, :ruby
             @before << node
           when :group, :source, :git, :platforms, :path
             if node.block
-              block = { block: node, gems: [] }
+              set = { set: node, gems: [] }
 
               node.block.body.compact_child_nodes.each do |child|
-                block[:gems] << parse_gem(child)
+                set[:gems] << parse_gem(child)
               end
 
-              @blocks << block
+              @sets << set
             else
               @before << node
             end
@@ -55,24 +55,24 @@ module Rebundler
         chunks << node_to_s(node)
       end
 
-      blocks.each do |block|
-        block_node = block[:block]
-        block_lines = []
+      sets.each do |set|
+        set_node = set[:set]
+        set_lines = []
 
-        block_lines << "#{block_node.message} #{args_to_s(block_node.arguments)} do" if block_node
+        set_lines << "#{set_node.message} #{args_to_s(set_node.arguments)} do" if set_node
 
-        block[:gems].sort_by { _1[:name] }.each do |gem|
+        set[:gems].sort_by { _1[:name] }.each do |gem|
           line = +""
-          line << "  " if block_node
+          line << "  " if set_node
           line << node_to_s(gem[:node])
           line << " # #{gem[:summary]}" if gem[:summary]
 
-          block_lines << line
+          set_lines << line
         end
 
-        block_lines << "end" if block_node
+        set_lines << "end" if set_node
 
-        chunks << block_lines.join("\n")
+        chunks << set_lines.join("\n")
       end
 
       chunks.reject(&:empty?).join("\n\n") + "\n"
