@@ -12,7 +12,7 @@ module Rebundler
       @frozen_string_literal = false
       @before = []
       @sets = [
-        { set: nil, gems: [] } # all gems outside a specific block (group, source, etc) will end up here
+        { node: nil, gems: [] } # all gems outside a specific block (group, source, etc) will end up here
       ]
     end
 
@@ -31,13 +31,10 @@ module Rebundler
             @before << node
           when :group, :source, :git, :platforms, :path
             if node.block
-              set = { set: node, gems: [] }
-
-              node.block.body.compact_child_nodes.each do |child|
-                set[:gems] << parse_gem(child)
-              end
-
-              @sets << set
+              @sets << {
+                node:,
+                gems: node.block.body.compact_child_nodes.map { parse_gem(_1) }
+              }
             else
               @before << node
             end
@@ -56,7 +53,7 @@ module Rebundler
       end
 
       sets.each do |set|
-        set_node = set[:set]
+        set_node = set[:node]
         set_lines = []
 
         set_lines << "#{set_node.message} #{args_to_s(set_node.arguments)} do" if set_node
