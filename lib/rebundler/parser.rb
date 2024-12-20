@@ -19,7 +19,7 @@ module Rebundler
     def parse!
       parsed = Prism.parse(File.read(file))
 
-      @frozen_string_literal = true if parsed.magic_comments.map(&:key).include?("frozen_string_literal")
+      @frozen_string_literal = parsed.magic_comments.map(&:key).include?("frozen_string_literal")
 
       parsed.value.compact_child_nodes[0].compact_child_nodes.each do |node|
         case node.type
