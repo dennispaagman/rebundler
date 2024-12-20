@@ -63,11 +63,12 @@ module Rebundler
 
         block[:gems].sort_by { _1[:gem][:name] }.each do |gem|
           dep = gem[:gem]
-          code = node_to_s(gem[:node])
+          node = node_to_s(gem[:node])
 
           line = +""
           line << "  " if block_node
-          line << "#{code} # #{dep[:summary]}"
+          line << node
+          line << " # #{dep[:summary]}" if dep[:summary]
 
           block_lines << line
         end
@@ -83,22 +84,26 @@ module Rebundler
     private
 
     def find_gem(name)
-      find_loaded_gem(name) || find_external_gem(name)
+      summary = find_loaded_gem_summary(name) || find_external_gem_summary(name)
+
+      { name:, summary: }
     end
 
-    def find_loaded_gem(name)
+    def find_loaded_gem_summary(name)
       gem = Gem::Specification.find_by_name(name)
 
-      { name: gem.name, summary: gem.summary }
+      gem.summary
     rescue Gem::MissingSpecError
       nil
     end
 
-    def find_external_gem(name)
+    def find_external_gem_summary(name)
       version = Gems.latest_version(name)["version"]
       gem = Gems::V2.info(name, version)
 
-      { name: gem["name"], summary: gem["summary"] }
+      gem["summary"]
+    rescue Gems::NotFound
+      nil
     end
 
     def args_to_s(args)

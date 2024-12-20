@@ -254,4 +254,28 @@ class TestParserGemVariants < Minitest::Test
       GEMFILE
     end
   end
+
+  def test_not_loaded_gem
+    gemfile = <<~GEMFILE
+      gem "phlex"
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.write!
+        gem "phlex" # A fun framework for building views in Ruby.
+      GEMFILE
+    end
+  end
+
+  def test_non_existing_gem
+    gemfile = <<~GEMFILE
+      gem "schrodingers_gem"
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.write!
+        gem "schrodingers_gem"
+      GEMFILE
+    end
+  end
 end
