@@ -9,4 +9,5 @@ gem "minitest", "~> 5.16" # minitest provides a complete suite of testing facili
 gem "rake", "~> 13.0" # Rake is a Make-like program implemented in Ruby
 gem "rubocop", "~> 1.21" # Automatic Ruby code style checking tool.
 gem "rubocop-minitest" # Automatic Minitest code style checking tool.
+gem "rubocop-rake" # A RuboCop plugin for Rake
 gem "ruby-lsp" # An opinionated language server for Ruby
