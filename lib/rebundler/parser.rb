@@ -4,7 +4,7 @@ require "prism"
 
 module Rebundler
   class Parser
-    attr_reader :blocks
+    attr_reader :file, :before, :blocks
 
     def initialize(file)
       @file = file
@@ -15,7 +15,7 @@ module Rebundler
     end
 
     def parse!
-      parsed = Prism.parse(File.read(@file)).value
+      parsed = Prism.parse(File.read(file)).value
 
       parsed.compact_child_nodes[0].compact_child_nodes.each do |node|
         case node.type
@@ -45,11 +45,11 @@ module Rebundler
     def write!
       chunks = []
 
-      @before.each do |node|
+      before.each do |node|
         chunks << node_to_s(node)
       end
 
-      @blocks.each do |block|
+      blocks.each do |block|
         block_node = block[:block]
         block_lines = []
 
