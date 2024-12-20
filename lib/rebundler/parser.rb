@@ -61,14 +61,11 @@ module Rebundler
 
         block_lines << "#{block_node.message} #{args_to_s(block_node.arguments)} do" if block_node
 
-        block[:gems].sort_by { _1[:gem][:name] }.each do |gem|
-          dep = gem[:gem]
-          node = node_to_s(gem[:node])
-
+        block[:gems].sort_by { _1[:name] }.each do |gem|
           line = +""
           line << "  " if block_node
-          line << node
-          line << " # #{dep[:summary]}" if dep[:summary]
+          line << node_to_s(gem[:node])
+          line << " # #{gem[:summary]}" if gem[:summary]
 
           block_lines << line
         end
@@ -147,7 +144,7 @@ module Rebundler
 
       gem_name = node.arguments.child_nodes[0].content
 
-      { gem: find_gem(gem_name), node: }
+      find_gem(gem_name).merge(node:)
     end
   end
 end
