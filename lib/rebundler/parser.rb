@@ -52,7 +52,7 @@ module Rebundler
         buffer << node_to_s(node)
       end
 
-      sets.each do |set|
+      sets.sort_by { node_to_s(_1[:node]) || "" }.each do |set|
         set_node = set[:node]
         set_buffer = []
 

@@ -162,4 +162,60 @@ class TestParserBlocks < Minitest::Test
       GEMFILE
     end
   end
+
+  def test_ordering_groups_alpabetically
+    gemfile = <<~GEMFILE
+      group :test do
+        gem "minitest"
+      end
+
+      group :development do
+        gem "rubocop"
+      end
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.write!
+        group :development do
+          gem "rubocop" # Automatic Ruby code style checking tool.
+        end
+
+        group :test do
+          gem "minitest" # minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking
+        end
+      GEMFILE
+    end
+  end
+
+  def test_ordering_combined_groups
+    gemfile = <<~GEMFILE
+      group :development, :test do
+        gem "debug"
+      end
+
+      group :test do
+        gem "minitest"
+      end
+
+      group :development do
+        gem "rubocop"
+      end
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.write!
+        group :development do
+          gem "rubocop" # Automatic Ruby code style checking tool.
+        end
+
+        group :development, :test do
+          gem "debug" # Debugging functionality for Ruby
+        end
+
+        group :test do
+          gem "minitest" # minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking
+        end
+      GEMFILE
+    end
+  end
 end
