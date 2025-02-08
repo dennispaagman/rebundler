@@ -44,12 +44,12 @@ module Rebundler
     end
 
     def write!
-      chunks = []
+      buffer = []
 
-      chunks << "# frozen_string_literal: true" if frozen_string_literal
+      buffer << "# frozen_string_literal: true" if frozen_string_literal
 
       before.each do |node|
-        chunks << node_to_s(node)
+        buffer << node_to_s(node)
       end
 
       sets.each do |set|
@@ -69,10 +69,10 @@ module Rebundler
 
         set_lines << "end" if set_node
 
-        chunks << set_lines.join("\n")
+        buffer << set_lines.join("\n")
       end
 
-      chunks.reject(&:empty?).join("\n\n") + "\n"
+      buffer.reject(&:empty?).join("\n\n") + "\n"
     end
 
     private
