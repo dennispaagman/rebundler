@@ -54,9 +54,9 @@ module Rebundler
 
       sets.each do |set|
         set_node = set[:node]
-        set_lines = []
+        set_buffer = []
 
-        set_lines << "#{set_node.message} #{args_to_s(set_node.arguments)} do" if set_node
+        set_buffer << "#{set_node.message} #{args_to_s(set_node.arguments)} do" if set_node
 
         set[:gems].sort_by { _1[:name] }.each do |gem|
           line = +""
@@ -64,12 +64,12 @@ module Rebundler
           line << node_to_s(gem[:node])
           line << " # #{gem[:summary]}" if gem[:summary]
 
-          set_lines << line
+          set_buffer << line
         end
 
-        set_lines << "end" if set_node
+        set_buffer << "end" if set_node
 
-        buffer << set_lines.join("\n")
+        buffer << set_buffer.join("\n")
       end
 
       buffer.reject(&:empty?).join("\n\n") + "\n"
