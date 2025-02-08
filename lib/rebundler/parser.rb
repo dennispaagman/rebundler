@@ -5,7 +5,7 @@ require "gems"
 
 module Rebundler
   class Parser
-    SORTABLE_NODES = %i[gem plugin].freeze
+    SORTABLE_NODES = %i[plugin gem].freeze
     BLOCK_NODES = %i[gemspec git group path platforms ruby source].freeze
 
     attr_reader :file, :before, :sets, :frozen_string_literal
@@ -15,7 +15,7 @@ module Rebundler
       @frozen_string_literal = false
       @before = []
       @sets = [
-        { node: nil, gems: [] } # all gems outside a specific block (group, source, etc) will end up here
+        { node: nil, plugin: [], gem: [] } # all gems outside a specific block (group, source, etc) will end up here
       ]
     end
 
@@ -28,13 +28,18 @@ module Rebundler
         case node.type
         when :call_node
           case node.name
-          when *SORTABLE_NODES
-            @sets[0][:gems] << parse_gem(node)
+          when :gem
+            @sets[0][:gem] << parse_gem(node)
+          when :plugin
+            @sets[0][:plugin] << parse_gem(node)
           when *BLOCK_NODES
             if node.block
+              children = node.block.body.compact_child_nodes
+
               @sets << {
                 node:,
-                gems: node.block.body.compact_child_nodes.map { parse_gem(_1) }
+                plugin: children.filter { _1.name == :plugin }.map { parse_gem(_1) },
+                gem: children.filter { _1.name == :gem }.map { parse_gem(_1) }
               }
             else
               @before << node
@@ -59,14 +64,18 @@ module Rebundler
 
         set_buffer << [node_to_s(set_node), set_node.block.opening].compact.join(" ") if set_node
 
-        set[:gems].sort_by { _1[:name] }.each do |gem|
-          line = +""
-          line << "  " if set_node
-          line << node_to_s(gem[:node])
-          line << " # #{gem[:summary]}" if gem[:summary]
+        set_buffer << SORTABLE_NODES.map do |node_type|
+          nodes = set[node_type].sort_by { _1[:name] }
 
-          set_buffer << line
-        end
+          nodes.map do |gem|
+            line = +""
+            line << "  " if set_node
+            line << node_to_s(gem[:node])
+            line << " # #{gem[:summary]}" if gem[:summary]
+
+            line
+          end.join("\n")
+        end.reject(&:empty?).join("\n\n")
 
         set_buffer << set_node.block.closing if set_node&.block
 

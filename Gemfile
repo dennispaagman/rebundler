@@ -4,6 +4,8 @@ source "https://rubygems.org"
 
 gemspec
 
+plugin "rebundler", path: "." # Rebundler makes your Gemfile look good.
+
 gem "debug" # Debugging functionality for Ruby
 gem "minitest", "~> 5.16" # minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking
 gem "rake", "~> 13.0" # Rake is a Make-like program implemented in Ruby
