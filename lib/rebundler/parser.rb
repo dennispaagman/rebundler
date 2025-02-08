@@ -93,11 +93,10 @@ module Rebundler
 
     def find_external_gem_summary(name)
       version = Gems.latest_version(name)["version"]
-      gem = Gems::V2.info(name, version)
 
-      gem["summary"]
-    rescue Gems::NotFound
-      nil
+      return if version == "unknown"
+
+      Gems::V2.info(name, version)["summary"]
     end
 
     def args_to_s(args)

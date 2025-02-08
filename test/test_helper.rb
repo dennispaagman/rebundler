@@ -6,6 +6,7 @@ Bundler.require
 
 require "rebundler"
 require "minitest/autorun"
+require "webmock/minitest"
 
 def with_temporary_gemfile(content, &)
   file = Tempfile.new("Gemfile")
