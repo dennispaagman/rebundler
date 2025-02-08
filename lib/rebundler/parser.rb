@@ -56,7 +56,7 @@ module Rebundler
         set_node = set[:node]
         set_buffer = []
 
-        set_buffer << "#{set_node.message} #{args_to_s(set_node.arguments)} do" if set_node
+        set_buffer << [node_to_s(set_node), set_node.block.opening].compact.join(" ") if set_node
 
         set[:gems].sort_by { _1[:name] }.each do |gem|
           line = +""
@@ -67,7 +67,7 @@ module Rebundler
           set_buffer << line
         end
 
-        set_buffer << "end" if set_node
+        set_buffer << set_node.block.closing if set_node&.block
 
         buffer << set_buffer.join("\n")
       end
@@ -99,16 +99,12 @@ module Rebundler
       Gems::V2.info(name, version)["summary"]
     end
 
-    def args_to_s(args)
-      return if args.nil? || args.child_nodes.empty?
-
-      args.child_nodes.map { node_to_s(_1) }.join(", ")
-    end
-
     def node_to_s(node)
+      return if node.nil?
+
       case node.type
       when :call_node
-        "#{node.name} #{args_to_s(node.arguments)}".strip
+        [node.name, node_to_s(node.arguments)].compact.join(" ")
       when :keyword_hash_node
         node.elements.map do |element|
           key = node_to_s(element.key)
@@ -130,6 +126,10 @@ module Rebundler
         "true"
       when :false_node
         "false"
+      when :arguments_node
+        return if node.child_nodes.empty?
+
+        node.child_nodes.map { node_to_s(_1) }.join(", ")
       else
         raise NotImplementedError, "Unknown node type: #{node.type}"
       end

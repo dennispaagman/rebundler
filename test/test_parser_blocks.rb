@@ -146,4 +146,20 @@ class TestParserBlocks < Minitest::Test
       GEMFILE
     end
   end
+
+  def test_gemfile_with_bracketed_block
+    gemfile = <<~GEMFILE
+      group :development {
+        gem "rubocop"
+      }
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.write!
+        group :development {
+          gem "rubocop" # Automatic Ruby code style checking tool.
+        }
+      GEMFILE
+    end
+  end
 end
