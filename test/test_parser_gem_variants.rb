@@ -289,4 +289,16 @@ class TestParserGemVariants < Minitest::Test
       GEMFILE
     end
   end
+
+  def test_plugin
+    gemfile = <<~GEMFILE
+      plugin "rubocop"
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.write!
+        plugin "rubocop" # Automatic Ruby code style checking tool.
+      GEMFILE
+    end
+  end
 end

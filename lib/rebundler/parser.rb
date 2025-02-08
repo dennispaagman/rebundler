@@ -5,6 +5,9 @@ require "gems"
 
 module Rebundler
   class Parser
+    SORTABLE_NODES = %i[gem plugin].freeze
+    BLOCK_NODES = %i[gemspec git group path platforms ruby source].freeze
+
     attr_reader :file, :before, :sets, :frozen_string_literal
 
     def initialize(file)
@@ -25,11 +28,9 @@ module Rebundler
         case node.type
         when :call_node
           case node.name
-          when :gem
+          when *SORTABLE_NODES
             @sets[0][:gems] << parse_gem(node)
-          when :gemspec, :ruby
-            @before << node
-          when :group, :source, :git, :platforms, :path
+          when *BLOCK_NODES
             if node.block
               @sets << {
                 node:,
@@ -136,7 +137,7 @@ module Rebundler
     end
 
     def parse_gem(node)
-      return unless node.type == :call_node && node.name == :gem
+      return unless node.type == :call_node && SORTABLE_NODES.include?(node.name)
 
       gem_name = node.arguments.child_nodes[0].content
 
