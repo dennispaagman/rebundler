@@ -34,11 +34,13 @@ module Rebundler
             if node.block
               children = node.block.body.compact_child_nodes
 
-              @sets << {
-                node:,
-                plugin: children.filter { _1.name == :plugin }.map { parse_gem(_1) },
-                gem: children.filter { _1.name == :gem }.map { parse_gem(_1) }
-              }
+              set = { node:, plugin: [], gem: [] }
+
+              children.each do |child_node|
+                set[child_node.name] << parse_gem(child_node)
+              end
+
+              @sets << set
             else
               @before << node
             end
