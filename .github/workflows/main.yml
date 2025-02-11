@@ -16,7 +16,7 @@ jobs:
         ruby:
           - "3.3"
           - "3.4"
-          - "main"
+          - "head"
 
     steps:
       - uses: actions/checkout@v4
