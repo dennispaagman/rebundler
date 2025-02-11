@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "prism"
-require "gems"
 
 module Rebundler
   class Parser
@@ -104,11 +103,12 @@ module Rebundler
     end
 
     def find_external_gem_summary(name)
-      version = Gems.latest_version(name)["version"]
+      spec = Gem::SpecFetcher.fetcher.spec_for_dependency Gem::Dependency.new(name)
 
-      return if version == "unknown"
+      return unless spec
+      return if spec == [[], []]
 
-      Gems::V2.info(name, version)["summary"]
+      spec.first.first.first.summary
     end
 
     def node_to_s(node)
