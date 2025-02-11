@@ -37,7 +37,9 @@ module Rebundler
               set = { node:, plugin: [], gem: [] }
 
               children.each do |child_node|
-                set[child_node.name] << parse_gem(child_node)
+                parsed_node = parse_gem(child_node)
+
+                set[child_node.name] << parsed_node if parsed_node
               end
 
               @sets << set
