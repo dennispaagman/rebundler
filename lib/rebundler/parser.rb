@@ -28,10 +28,8 @@ module Rebundler
         case node.type
         when :call_node
           case node.name
-          when :gem
-            @sets[0][:gem] << parse_gem(node)
-          when :plugin
-            @sets[0][:plugin] << parse_gem(node)
+          when *SORTABLE_NODES
+            @sets[0][node.name] << parse_gem(node)
           when *BLOCK_NODES
             if node.block
               children = node.block.body.compact_child_nodes
