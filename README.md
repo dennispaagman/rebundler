@@ -1,34 +1,71 @@
 # Rebundler
 
-TODO: Delete this and the text below, and describe your gem
+Rebundler automatically reorders and annotes your Gemfile.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rebundler`. To experiment with that code, run `bin/console` for an interactive prompt.
+![Rebundler logo](https://github.com/user-attachments/assets/6f9ff5b9-5d1e-4537-80f0-21f27740571d)
+
+## Why would you want that?
+
+* **No more manual ordering of gems.** Let's admit that you usually just put them somewhere  vaguely adjacent.
+* **No bike shedding about the structure of your Gemfile.** Rebundler will take care of it.
+* **More context on what gems do.** Especially with all the funky gem names in our community (which is fun!) it's not entirely clear from most names alone what a gem does. Rebundler will add a comment with the gem's description.
+
+## Example
+
+This is a real life example from my own project. That looks a lot better, doesn't it?
+
+| Before | After |
+| ------ | ----- |
+| ![image](https://github.com/user-attachments/assets/42a76744-111b-4f73-bc62-8723637e6655) | ![image](https://github.com/user-attachments/assets/3ea6c70e-2239-4511-9040-c4db58203ec4) |
+
+
+## Known limitations
+
+* **Existing comments will be lost.** At this moment Rebundler does not persist existing comments.
+* **Probably does not work with all possible Gemfile configurations.** It is designed to work with the most common setups right now. If you encounter an issue, please open an issue on GitHub. I strive to support each sensible configuration.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+There are two ways to install Rebundler.
 
-Install the gem and add to the application's Gemfile by executing:
+### 1. Automatic mode
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+Simply add them gem to your Gemfile. the location does not matter as it will be resorted immediately.
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+```ruby
+gem "rebundler"
+```
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+This installs a Bundler plugin that automatically runs after installing gems. You should see a message in your terminal after running `bundle`:
 
-## Usage
+```sh
+$ bundle
 
-TODO: Write usage instructions here
+...
+
+Reordering and annotating Gemfile...
+Bundle complete! 10 Gemfile dependencies, 45 gems now installed.
+```
+
+### 2. Manual mode
+
+```ruby
+gem "rebundler", require: false
+```
+
+This does **not** load the plugin and means you have to run rebundler yourself by running a Rake task:
+
+```sh
+$ rake rebundle
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+After checking out the repo, run `bundle install` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rebundler.
+Bug reports and pull requests are welcome on GitHub at https://github.com/dennispaagman/rebundler.
 
 ## License
 
