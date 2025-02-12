@@ -2,13 +2,12 @@
 
 Rebundler automatically reorders and annotes your Gemfile.
 
-![Rebundler logo](https://github.com/user-attachments/assets/6f9ff5b9-5d1e-4537-80f0-21f27740571d)
 
 ## Why would you want that?
 
-* **No more manual ordering of gems.** Let's admit that you usually just put them somewhere  vaguely adjacent.
+* **No more manual ordering of gems.** Let's admit that you usually just put them somewhere  vaguely adjacent. Eventually your Gemfile will be a mess.
 * **No bike shedding about the structure of your Gemfile.** Rebundler will take care of it.
-* **More context on what gems do.** Especially with all the funky gem names in our community (which is fun!) it's not entirely clear from most names alone what a gem does. Rebundler will add a comment with the gem's description.
+* **More context on what gems do.** Especially with all the funky gem names in our community (which is fun!) it's not entirely clear from most names alone what it does. Rebundler will add a comment with the gem's description.
 
 ## Example
 
