@@ -17,7 +17,6 @@ module Bundler
         Bundler.setup
 
         parser = ::Rebundler::Parser.new(file)
-        parser.parse!
         File.write(file, parser.write!)
       rescue StandardError => e
         Bundler.ui.error "Error parsing Gemfile: #{e.message}"

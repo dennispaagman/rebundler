@@ -11,4 +11,3 @@ gem "rubocop", "~> 1.21" # Automatic Ruby code style checking tool.
 gem "rubocop-minitest" # Automatic Minitest code style checking tool.
 gem "rubocop-rake" # A RuboCop plugin for Rake
 gem "ruby-lsp" # An opinionated language server for Ruby
-gem "webmock" # Library for stubbing HTTP requests in Ruby.

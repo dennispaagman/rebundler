@@ -3,17 +3,6 @@
 require "test_helper"
 
 class TestParserGemVariants < Minitest::Test
-  def setup
-    stub_request(:get, "https://rubygems.org/api/v1/versions/schrodingers_gem/latest.json")
-      .to_return_json(body: { version: "unknown" })
-
-    stub_request(:get, "https://rubygems.org/api/v1/versions/phlex/latest.json")
-      .to_return_json(body: { version: "1.11.0" })
-
-    stub_request(:get, "https://rubygems.org/api/v2/rubygems/phlex/versions/1.11.0.json")
-      .to_return_json(body: { "summary" => "Object-oriented views in Ruby." })
-  end
-
   def test_gem_without_any_args
     gemfile = <<~GEMFILE
       gem "rubocop"
@@ -272,9 +261,11 @@ class TestParserGemVariants < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
-        gem "phlex" # Object-oriented views in Ruby.
-      GEMFILE
+      parser.stub(:find_external_gem_summary, "Object-oriented views in Ruby.") do
+        assert_equal <<~GEMFILE, parser.write!
+          gem "phlex" # Object-oriented views in Ruby.
+        GEMFILE
+      end
     end
   end
 
@@ -284,9 +275,11 @@ class TestParserGemVariants < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
-        gem "schrodingers_gem"
-      GEMFILE
+      parser.stub(:find_external_gem_summary, nil) do
+        assert_equal <<~GEMFILE, parser.write!
+          gem "schrodingers_gem"
+        GEMFILE
+      end
     end
   end
 

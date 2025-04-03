@@ -6,7 +6,7 @@ Bundler.require
 
 require "rebundler"
 require "minitest/autorun"
-require "webmock/minitest"
+require "minitest/mock"
 
 def with_temporary_gemfile(content, &)
   file = Tempfile.new("Gemfile")
@@ -25,7 +25,6 @@ end
 def with_parsed_gemfile(content, &)
   with_temporary_gemfile(content) do |file|
     parser = Rebundler::Parser.new(file.path)
-    parser.parse!
 
     yield parser
   end

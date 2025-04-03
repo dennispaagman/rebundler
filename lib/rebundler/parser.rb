@@ -18,39 +18,9 @@ module Rebundler
       ]
     end
 
-    def parse!
-      parsed = Prism.parse(File.read(file))
-
-      @frozen_string_literal = parsed.magic_comments.map(&:key).include?("frozen_string_literal")
-
-      parsed.value.compact_child_nodes[0].compact_child_nodes.each do |node|
-        case node.type
-        when :call_node
-          case node.name
-          when *SORTABLE_NODES
-            @sets[0][node.name] << parse_gem(node)
-          when *BLOCK_NODES
-            if node.block
-              children = node.block.body.compact_child_nodes
-
-              set = { node:, plugin: [], gem: [] }
-
-              children.each do |child_node|
-                parsed_node = parse_gem(child_node)
-
-                set[child_node.name] << parsed_node if parsed_node
-              end
-
-              @sets << set
-            else
-              @before << node
-            end
-          end
-        end
-      end
-    end
-
     def write!
+      parse!
+
       buffer = []
 
       buffer << "# frozen_string_literal: true" if frozen_string_literal
@@ -87,6 +57,38 @@ module Rebundler
     end
 
     private
+
+    def parse!
+      parsed = Prism.parse(File.read(file))
+
+      @frozen_string_literal = parsed.magic_comments.map(&:key).include?("frozen_string_literal")
+
+      parsed.value.compact_child_nodes[0].compact_child_nodes.each do |node|
+        case node.type
+        when :call_node
+          case node.name
+          when *SORTABLE_NODES
+            @sets[0][node.name] << parse_gem(node)
+          when *BLOCK_NODES
+            if node.block
+              children = node.block.body.compact_child_nodes
+
+              set = { node:, plugin: [], gem: [] }
+
+              children.each do |child_node|
+                parsed_node = parse_gem(child_node)
+
+                set[child_node.name] << parsed_node if parsed_node
+              end
+
+              @sets << set
+            else
+              @before << node
+            end
+          end
+        end
+      end
+    end
 
     def find_gem(name)
       summary = find_loaded_gem_summary(name) || find_external_gem_summary(name)
