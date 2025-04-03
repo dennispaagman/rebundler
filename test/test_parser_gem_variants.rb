@@ -11,7 +11,7 @@ class TestParserGemVariants < Minitest::Test
       .to_return_json(body: { version: "1.11.0" })
 
     stub_request(:get, "https://rubygems.org/api/v2/rubygems/phlex/versions/1.11.0.json")
-      .to_return_json(body: { "summary" => "A fun framework for building views in Ruby." })
+      .to_return_json(body: { "summary" => "Object-oriented views in Ruby." })
   end
 
   def test_gem_without_any_args
@@ -273,7 +273,7 @@ class TestParserGemVariants < Minitest::Test
 
     with_parsed_gemfile(gemfile) do |parser|
       assert_equal <<~GEMFILE, parser.write!
-        gem "phlex" # A fun framework for building views in Ruby.
+        gem "phlex" # Object-oriented views in Ruby.
       GEMFILE
     end
   end
