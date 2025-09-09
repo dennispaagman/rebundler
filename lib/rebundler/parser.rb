@@ -36,7 +36,7 @@ module Rebundler
         set_buffer << [node_to_s(set_node), set_node.block.opening].compact.join(" ") if set_node
 
         set_buffer << SORTABLE_NODES.map do |node_type|
-          nodes = set[node_type].sort_by { _1[:name] }
+          nodes = set[node_type].sort_by { _1[:name].tr("-_", "").downcase }
 
           nodes.map do |gem|
             line = +""
