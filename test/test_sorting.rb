@@ -34,4 +34,52 @@ class TestSorting < Minitest::Test
       end
     end
   end
+
+  def test_sorting_with_group_in_between
+    gemfile = <<~GEMFILE
+      gem "debug"
+
+      group :development do
+        gem "rake"
+      end
+
+      gem "rubocop"
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      parser.stub(:find_external_gem_summary, nil) do
+        assert_equal <<~GEMFILE, parser.write!
+          gem "debug" # Debugging functionality for Ruby
+          gem "rubocop" # Automatic Ruby code style checking tool.
+
+          group :development do
+            gem "rake" # Rake is a Make-like program implemented in Ruby
+          end
+        GEMFILE
+      end
+    end
+  end
+
+  def test_sorting_with_two_equal_groups
+    gemfile = <<~GEMFILE
+      group :development do
+        gem "rubocop"
+      end
+
+      group :development do
+        gem "rake"
+      end
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      parser.stub(:find_external_gem_summary, nil) do
+        assert_equal <<~GEMFILE, parser.write!
+          group :development do
+            gem "rake" # Rake is a Make-like program implemented in Ruby
+            gem "rubocop" # Automatic Ruby code style checking tool.
+          end
+        GEMFILE
+      end
+    end
+  end
 end

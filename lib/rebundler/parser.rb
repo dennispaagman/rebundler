@@ -14,7 +14,7 @@ module Rebundler
       @frozen_string_literal = false
       @before = []
       @sets = [
-        { node: nil, plugin: [], gem: [] } # all gems outside a specific block (group, source, etc) will end up here
+        { name: "", node: nil, plugin: [], gem: [] } # all gems outside a specific block (group, source, etc) will end up here
       ]
     end
 
@@ -29,7 +29,7 @@ module Rebundler
         buffer << node_to_s(node)
       end
 
-      sets.sort_by { node_to_s(_1[:node]) || "" }.each do |set|
+      sets.sort_by { _1[:name] }.each do |set|
         set_node = set[:node]
         set_buffer = []
 
@@ -72,8 +72,9 @@ module Rebundler
           when *BLOCK_NODES
             if node.block
               children = node.block.body.compact_child_nodes
+              name = node_to_s(node.arguments)
 
-              set = { node:, plugin: [], gem: [] }
+              set = @sets.find { |set| set[:name] == name } || { name:, node:, plugin: [], gem: [] }
 
               children.each do |child_node|
                 parsed_node = parse_gem(child_node)
@@ -81,7 +82,7 @@ module Rebundler
                 set[child_node.name] << parsed_node if parsed_node
               end
 
-              @sets << set
+              @sets << set unless @sets.include?(set)
             else
               @before << node
             end
