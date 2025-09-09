@@ -27,6 +27,9 @@ There are two ways to install Rebundler.
 
 ### 1. Automatic mode
 
+> [!NOTE]
+> This does not seem to work properly yet, I need to dig into why later.
+
 Simply add them gem to your Gemfile. the location does not matter as it will be resorted immediately.
 
 ```ruby
