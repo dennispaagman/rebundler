@@ -10,6 +10,3 @@ require "rubocop/rake_task"
 RuboCop::RakeTask.new
 
 task default: %i[test rubocop]
-
-path = File.expand_path(__dir__)
-Dir.glob("#{path}/lib/rebundler/tasks/**/*.rake").each { |f| load f }

@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["dennis@paagman.dev"]
 
   spec.summary = "Rebundler makes your Gemfile look good."
-  spec.homepage = "https://github.com/djfpaagman/rebundler"
+  spec.homepage = "https://github.com/dennispaagman/rebundler"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.3.0"
 

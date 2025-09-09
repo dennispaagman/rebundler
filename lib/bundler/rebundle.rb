@@ -1,9 +1,17 @@
 # frozen_string_literal: true
 
+require "bundler"
+
 module Bundler
   class Rebundle < Bundler::Plugin::API
+    command "rebundle"
+
     hook "after-install-all" do
       parse_and_write_gemfile!
+    end
+
+    def exec(command, args)
+      send command, args
     end
 
     def self.parse_and_write_gemfile!

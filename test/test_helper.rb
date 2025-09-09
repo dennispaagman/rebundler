@@ -2,8 +2,6 @@
 
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 
-Bundler.require
-
 require "rebundler"
 require "minitest/autorun"
 require "minitest/mock"

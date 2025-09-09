@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../lib/rebundler"
+
+file = ARGV[0] || (Dir.pwd + "/Gemfile")
+parser = Rebundler::Parser.new(file)
+
+File.write(file, parser.write!)
