@@ -4,6 +4,15 @@
 require_relative "../lib/rebundler"
 
 file = ARGV[0] || (Dir.pwd + "/Gemfile")
-parser = Rebundler::Parser.new(file)
 
-File.write(file, parser.write!)
+puts "Reordering and annotating Gemfile..."
+
+begin
+  # Load all gems in the Gemfile so we can use them to grab the summary instead of
+  # having to hit rubygems.org
+  Bundler.setup
+  parser = Rebundler::Parser.new(file)
+  File.write(file, parser.write!)
+rescue StandardError => e
+  puts "Error parsing Gemfile: #{e.message}"
+end
