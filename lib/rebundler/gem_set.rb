@@ -2,13 +2,24 @@
 
 module Rebundler
   class GemSet
-    attr_reader :name, :node, :plugins, :gems
+    include Comparable
 
-    def initialize(name: "", node: nil)
+    attr_reader :name, :node, :plugins, :gems, :default
+
+    def initialize(name: nil, node: nil, default: false)
       @name = name
       @node = node
+      @default = default
+
       @plugins = []
       @gems = []
+    end
+
+    def <=>(other)
+      return nil unless other.is_a?(GemSet)
+
+      # Default first, then sort by name
+      [default ? 0 : 1, name] <=> [other.default ? 0 : 1, other.name]
     end
 
     def ==(other)

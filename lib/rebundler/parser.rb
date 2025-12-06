@@ -10,9 +10,7 @@ module Rebundler
       @file = file
       @frozen_string_literal = false
       @preamble_nodes = []
-      @gem_sets = []
-
-      build_set(name: "") # all gems outside a specific block (group, source, etc) will end up here
+      @gem_sets = [GemSet.new(default: true)] # all gems outside a specific block (group, source, etc) will end up here
     end
 
     def build_set(name:, node: nil)

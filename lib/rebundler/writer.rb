@@ -15,7 +15,7 @@ module Rebundler
         buffer << Serializer.node_to_s(node)
       end
 
-      gem_sets.sort_by(&:name).each do |set|
+      gem_sets.sort.each do |set|
         set_buffer = []
 
         set_buffer << [Serializer.node_to_s(set.node), set.node.block.opening].compact.join(" ") if set.node

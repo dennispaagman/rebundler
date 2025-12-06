@@ -5,7 +5,7 @@ module Rebundler
     def initialize(parser)
       super()
       @parser = parser
-      @current_set = @parser.gem_sets.first
+      @current_set = @parser.gem_sets.find(&:default)
     end
 
     def visit_call_node(node)
