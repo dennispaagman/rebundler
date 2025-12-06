@@ -14,7 +14,7 @@ begin
   # having to hit rubygems.org
   Bundler.setup
   parser = Rebundler::Parser.new(file)
-  new_content = parser.write!
+  new_content = parser.parse_and_write!
 
   if ci_mode
     # In CI mode, compare the new content with the existing file

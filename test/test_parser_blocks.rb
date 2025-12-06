@@ -11,7 +11,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         group :development do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end
@@ -27,7 +27,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         group :development, :test do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end
@@ -43,7 +43,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         group [:development, :test] do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end
@@ -59,7 +59,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         group :development, optional: true do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end
@@ -75,7 +75,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         source "https://gems.example.org" do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end
@@ -91,7 +91,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         git "https://github.com/rubocop/rubocop.git" do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end
@@ -107,7 +107,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         git "https://github.com/rubocop/rubocop.git", branch: "main" do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end
@@ -123,7 +123,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         path "../rubocop" do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end
@@ -139,7 +139,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         platforms :ruby do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end
@@ -155,7 +155,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         group :development {
           gem "rubocop" # Automatic Ruby code style checking tool.
         }
@@ -175,7 +175,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         group :development do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end
@@ -203,7 +203,7 @@ class TestParserBlocks < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         group :development do
           gem "rubocop" # Automatic Ruby code style checking tool.
         end

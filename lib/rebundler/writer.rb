@@ -11,17 +11,17 @@ module Rebundler
 
       buffer << "# frozen_string_literal: true" if frozen_string_literal
 
-      before.each do |node|
+      preamble_nodes.each do |node|
         buffer << Serializer.node_to_s(node)
       end
 
-      sets.sort_by(&:name).each do |set|
+      gem_sets.sort_by(&:name).each do |set|
         set_buffer = []
 
         set_buffer << [Serializer.node_to_s(set.node), set.node.block.opening].compact.join(" ") if set.node
 
         set_buffer << [set.plugins, set.gems].map do |nodes|
-          sorted = nodes.sort_by { _1[:name].tr("-_", "").downcase }
+          sorted = nodes.sort_by { |node| node[:name].tr("-_", "").downcase }
 
           sorted.map do |gem|
             line = +""
@@ -43,8 +43,16 @@ module Rebundler
 
     private
 
-    def before = @parser.before
-    def sets = @parser.sets
-    def frozen_string_literal = @parser.frozen_string_literal
+    def preamble_nodes
+      @parser.preamble_nodes
+    end
+
+    def gem_sets
+      @parser.gem_sets
+    end
+
+    def frozen_string_literal
+      @parser.frozen_string_literal
+    end
   end
 end

@@ -32,9 +32,9 @@ module Rebundler
       when :arguments_node
         return if node.child_nodes.empty?
 
-        node.child_nodes.map { node_to_s(_1) }.join(", ")
+        node.child_nodes.map { |child| node_to_s(child) }.join(", ")
       else
-        raise NotImplementedError, "Unknown node type: #{node.type}"
+        raise Rebundler::Error, "Unsupported node type: #{node.type}"
       end
     end
   end

@@ -9,7 +9,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         source "https://rubygems.org"
       GEMFILE
     end
@@ -21,7 +21,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         ruby "3.2.0"
       GEMFILE
     end
@@ -33,7 +33,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         ruby "3.2.0", engine: "ruby", engine_version: "3.2.0"
       GEMFILE
     end
@@ -45,7 +45,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         ruby file: ".ruby-version"
       GEMFILE
     end
@@ -57,7 +57,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         gemspec
       GEMFILE
     end
@@ -69,7 +69,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         gemspec name: "my_gem", path: "../", development_group: :dev
       GEMFILE
     end
@@ -83,7 +83,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.write!
+      assert_equal <<~GEMFILE, parser.parse_and_write!
         # frozen_string_literal: true
 
         gem "rubocop" # Automatic Ruby code style checking tool.

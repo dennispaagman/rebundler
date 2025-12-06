@@ -1,6 +1,6 @@
 # Rebundler
 
-Rebundler automatically reorders and annotes your Gemfile.
+Rebundler automatically reorders and annotates your Gemfile.
 
 ## Why would you want that?
 
