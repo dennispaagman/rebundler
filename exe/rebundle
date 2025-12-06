@@ -3,7 +3,9 @@
 
 require_relative "../lib/rebundler"
 
-file = ARGV[0] || (Dir.pwd + "/Gemfile")
+# Parse command line arguments
+ci_mode = ARGV.include?("--ci")
+file = ARGV.reject { |arg| arg.start_with?("--") }[0] || (Dir.pwd + "/Gemfile")
 
 puts "Reordering and annotating Gemfile..."
 
@@ -12,7 +14,26 @@ begin
   # having to hit rubygems.org
   Bundler.setup
   parser = Rebundler::Parser.new(file)
-  File.write(file, parser.write!)
+  new_content = parser.write!
+
+  if ci_mode
+    # In CI mode, compare the new content with the existing file
+    current_content = File.read(file)
+
+    if new_content == current_content
+      puts "✓ Gemfile is already properly formatted"
+      exit 0
+    else
+      puts "✗ Gemfile is not properly formatted"
+      puts "Run 'rebundle' to fix formatting issues"
+      exit 1
+    end
+  else
+    # In normal mode, write the new content to the file
+    File.write(file, new_content)
+    puts "✓ Gemfile has been reordered and annotated"
+  end
 rescue StandardError => e
   puts "Error parsing Gemfile: #{e.message}"
+  exit 1
 end
