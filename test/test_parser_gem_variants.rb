@@ -261,7 +261,7 @@ class TestParserGemVariants < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      parser.stub(:find_external_gem_summary, "Object-oriented views in Ruby.") do
+      Rebundler::GemFetcher.stub(:find_external_gem_summary, "Object-oriented views in Ruby.") do
         assert_equal <<~GEMFILE, parser.write!
           gem "phlex" # Object-oriented views in Ruby.
         GEMFILE
@@ -275,7 +275,7 @@ class TestParserGemVariants < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      parser.stub(:find_external_gem_summary, nil) do
+      Rebundler::GemFetcher.stub(:find_external_gem_summary, nil) do
         assert_equal <<~GEMFILE, parser.write!
           gem "schrodingers_gem"
         GEMFILE

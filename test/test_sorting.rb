@@ -25,7 +25,7 @@ class TestSorting < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      parser.stub(:find_external_gem_summary, nil) do
+      Rebundler::GemFetcher.stub(:find_external_gem_summary, nil) do
         assert_equal <<~GEMFILE, parser.write!
           gem "something"
           gem "something-alpha"
@@ -47,7 +47,7 @@ class TestSorting < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      parser.stub(:find_external_gem_summary, nil) do
+      Rebundler::GemFetcher.stub(:find_external_gem_summary, nil) do
         assert_equal <<~GEMFILE, parser.write!
           gem "debug" # Debugging functionality for Ruby
           gem "rubocop" # Automatic Ruby code style checking tool.
@@ -72,7 +72,7 @@ class TestSorting < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      parser.stub(:find_external_gem_summary, nil) do
+      Rebundler::GemFetcher.stub(:find_external_gem_summary, nil) do
         assert_equal <<~GEMFILE, parser.write!
           group :development do
             gem "rake" # Rake is a Make-like program implemented in Ruby

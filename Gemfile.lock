@@ -84,6 +84,7 @@ GEM
     unicode-display_width (3.1.5)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.1.0)
+    zeitwerk (2.7.3)
 
 PLATFORMS
   arm64-darwin-23
@@ -99,6 +100,7 @@ DEPENDENCIES
   rubocop-minitest
   rubocop-rake
   ruby-lsp
+  zeitwerk
 
 BUNDLED WITH
    2.6.3

@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "rebundler/version"
-require_relative "rebundler/parser"
-
-require_relative "bundler/rebundle"
+require "zeitwerk"
+loader = Zeitwerk::Loader.for_gem
+loader.ignore("#{__dir__}/bundler")
+loader.setup
 
 module Rebundler
   class Error < StandardError; end
-  # Your code goes here...
+
+  SORTABLE_NODES = %i[plugin gem].freeze
+  BLOCK_NODES = %i[gemspec git group path platforms ruby source].freeze
 end
