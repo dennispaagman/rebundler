@@ -59,6 +59,15 @@ This does **not** load the plugin and means you have to run rebundler yourself b
 $ bundle exec rebundle
 ```
 
+### 3. CI mode
+
+If you run `bundle exec rebundle --ci`, rebundler will run in CI mode, which will compare the output
+of the current Gemfile to a freshly formatted one.
+
+If there are differences, rebundler will exit with a non-zero status code.
+
+This does not write to the Gemfile.
+
 ## Development
 
 After checking out the repo, run `bundle install` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
