@@ -27,7 +27,7 @@ GEM
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
-    minitest (5.25.5)
+    minitest (5.27.0)
     minitest-difftastic (0.2.1)
       difftastic (~> 0.6)
     parallel (1.27.0)
@@ -92,7 +92,7 @@ PLATFORMS
 
 DEPENDENCIES
   debug
-  minitest (~> 5.16)
+  minitest (~> 5.27)
   minitest-difftastic
   rake (~> 13.0)
   rebundler!
