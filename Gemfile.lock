@@ -45,7 +45,7 @@ GEM
       stringio
     racc (1.8.1)
     rainbow (3.1.1)
-    rake (13.3.0)
+    rake (13.3.1)
     rbs (3.9.5)
       logger
     rdoc (6.14.2)
@@ -94,7 +94,7 @@ DEPENDENCIES
   debug
   minitest (~> 5.27)
   minitest-difftastic
-  rake (~> 13.0)
+  rake (~> 13.3)
   rebundler!
   rubocop (~> 1.21)
   rubocop-minitest
