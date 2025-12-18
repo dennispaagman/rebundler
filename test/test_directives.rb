@@ -90,4 +90,20 @@ class TestDirectives < Minitest::Test
       GEMFILE
     end
   end
+
+  def test_git_source
+    gemfile = <<~'GEMFILE'
+      git_source(:bc) { |repo| "https://github.com/basecamp/#{repo}" }
+
+      gem "rails"
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~'GEMFILE', parser.parse_and_write!
+        git_source(:bc) { |repo| "https://github.com/basecamp/#{repo}" }
+
+        gem "rails" # Full-stack web application framework.
+      GEMFILE
+    end
+  end
 end

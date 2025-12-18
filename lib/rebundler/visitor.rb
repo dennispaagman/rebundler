@@ -16,6 +16,8 @@ module Rebundler
       when :gem
         parsed_gem = GemFetcher.parse_gem(node)
         @current_set.gems << parsed_gem if parsed_gem
+      when :git_source
+        @parser.preamble_nodes << node
       when *BLOCK_NODES
         if node.block
           # Use the full block declaration (e.g., "group :development do") as the unique name
