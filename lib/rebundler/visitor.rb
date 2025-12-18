@@ -18,7 +18,8 @@ module Rebundler
         @current_set.gems << parsed_gem if parsed_gem
       when *BLOCK_NODES
         if node.block
-          name = Serializer.node_to_s(node)
+          # Use the full block declaration (e.g., "group :development do") as the unique name
+          name = node.location.slice.lines.first.strip
 
           previous_set = @current_set
           @current_set = @parser.find_or_build_set(name:, node:)

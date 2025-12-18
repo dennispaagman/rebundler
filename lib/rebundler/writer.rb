@@ -16,26 +16,21 @@ module Rebundler
       end
 
       gem_sets.sort.each do |set|
-        set_buffer = []
-
-        set_buffer << [Serializer.node_to_s(set.node), set.node.block.opening].compact.join(" ") if set.node
-
-        set_buffer << [set.plugins, set.gems].map do |nodes|
+        gem_content = [set.plugins, set.gems].map do |nodes|
           sorted = nodes.sort_by { |node| node[:name].tr("-_", "").downcase }
 
           sorted.map do |gem|
-            line = +""
-            line << "  " if set.node
-            line << Serializer.node_to_s(gem[:node])
+            line = +Serializer.node_to_s(gem[:node])
             line << " # #{gem[:summary]}" if gem[:summary]
-
             line
           end.join("\n")
         end.reject(&:empty?).join("\n\n")
 
-        set_buffer << set.node.block.closing if set.node&.block
-
-        buffer << set_buffer.join("\n")
+        buffer << if set.node
+                    Serializer.node_to_s(set.node) { gem_content }
+                  else
+                    gem_content
+                  end
       end
 
       buffer.reject(&:empty?).join("\n\n") + "\n"
