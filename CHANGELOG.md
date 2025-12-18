@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.3.0] - 2025-12-18
+
+- Add support for tabs instead of spaces.
+- Add support for `git_source`.
+- Some refactoring.
+
 ## [0.2.0] - 2025-12-06
 
 Notable changes:
