@@ -20,7 +20,7 @@ module Rebundler
       return "" unless node
 
       second_line = node.location.slice.lines[1]
-      second_line&.[](/\A */) || "  "
+      second_line&.[](/\A[#{WHITESPACE_CHARACTERS}]*/) || "  "
     end
   end
 end
