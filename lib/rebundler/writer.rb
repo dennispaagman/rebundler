@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
+require "forwardable"
+
 module Rebundler
   class Writer
+    extend Forwardable
+
+    def_delegators :@parser, :preamble_nodes, :gem_sets, :frozen_string_literal
+
     def initialize(parser)
       @parser = parser
     end
@@ -34,20 +40,6 @@ module Rebundler
       end
 
       buffer.reject(&:empty?).join("\n\n") + "\n"
-    end
-
-    private
-
-    def preamble_nodes
-      @parser.preamble_nodes
-    end
-
-    def gem_sets
-      @parser.gem_sets
-    end
-
-    def frozen_string_literal
-      @parser.frozen_string_literal
     end
   end
 end
