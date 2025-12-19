@@ -7,8 +7,8 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.3)
-    date (3.4.1)
-    debug (1.11.0)
+    date (3.5.1)
+    debug (1.11.1)
       irb (~> 1.10)
       reline (>= 0.3.8)
     difftastic (0.7.0)
@@ -17,9 +17,9 @@ GEM
       pretty_please
     dispersion (0.2.0)
       prism
-    erb (5.0.2)
-    io-console (0.8.1)
-    irb (1.15.2)
+    erb (6.0.1)
+    io-console (0.8.2)
+    irb (1.16.0)
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
@@ -34,13 +34,13 @@ GEM
     parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
-    pp (0.6.2)
+    pp (0.6.3)
       prettyprint
     pretty_please (0.2.0)
       dispersion (~> 0.2)
     prettyprint (0.2.0)
     prism (1.6.0)
-    psych (5.2.6)
+    psych (5.3.1)
       date
       stringio
     racc (1.8.1)
@@ -48,11 +48,12 @@ GEM
     rake (13.3.1)
     rbs (3.9.5)
       logger
-    rdoc (6.14.2)
+    rdoc (7.0.1)
       erb
       psych (>= 4.0.0)
+      tsort
     regexp_parser (2.11.3)
-    reline (0.6.2)
+    reline (0.6.3)
       io-console (~> 0.5)
     rubocop (1.81.7)
       json (~> 2.3)
@@ -80,7 +81,8 @@ GEM
       prism (>= 1.2, < 2.0)
       rbs (>= 3, < 5)
     ruby-progressbar (1.13.0)
-    stringio (3.1.7)
+    stringio (3.2.0)
+    tsort (0.2.0)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
