@@ -19,6 +19,26 @@ class TestParserBlocks < Minitest::Test
     end
   end
 
+  def test_gemfile_with_group_block_with_existing_comment
+    gemfile = <<~GEMFILE
+      gem "minitest"
+
+      group :development do
+        gem "rubocop" # Style police
+      end
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.parse_and_write!
+        gem "minitest" # minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking
+
+        group :development do
+          gem "rubocop" # Automatic Ruby code style checking tool.
+        end
+      GEMFILE
+    end
+  end
+
   def test_gemfile_with_group_block_with_multiple
     gemfile = <<~GEMFILE
       group :development, :test do
@@ -214,6 +234,23 @@ class TestParserBlocks < Minitest::Test
 
         group :test do
           gem "minitest" # minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking
+        end
+      GEMFILE
+    end
+  end
+
+  # NOTE: the \t is explicit here, to prevent auto formatting from messing with the test.
+  def test_group_with_tabs_instead_of_spaces
+    gemfile = <<~GEMFILE
+      group :development do
+      \tgem "rubocop"
+      end
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.parse_and_write!
+        group :development do
+        \tgem "rubocop" # Automatic Ruby code style checking tool.
         end
       GEMFILE
     end

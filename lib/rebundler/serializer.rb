@@ -3,24 +3,29 @@
 module Rebundler
   class Serializer
     def self.node_to_s(node)
-      return if node.nil?
+      lines = node.location.slice.lines
 
-      if node.block && block_given?
-        indent = detect_indent(node)
-        indented_content = yield.lines.map { |line| indent + line.lstrip }.join
+      # If a block is given, we replace the content of the node's block
+      # with the content of the passed block.
+      if node.block && block_given? && lines.size > 1
+        depth = find_depth(node)
+        tab_or_space = find_spacing_character(node)
 
-        stripped_block = node.location.slice.gsub(node.block.body.location.slice, "BLOCK")
-        stripped_block.gsub(/[#{WHITESPACE_CHARACTERS}]*BLOCK/, indented_content)
+        indented_content = yield.lines.map { |line| (tab_or_space * depth) + line }.join
+
+        lines.first + indented_content + "\n" + lines.last
       else
         node.location.slice
       end
     end
 
-    def self.detect_indent(node)
-      return "" unless node
+    def self.find_depth(node)
+      node.block.body.location.start_column
+    end
 
-      second_line = node.location.slice.lines[1]
-      second_line&.[](/\A[#{WHITESPACE_CHARACTERS}]*/) || "  "
+    def self.find_spacing_character(node)
+      # Assume it's formatted with tabs if there is ANY tab in the whole block of code.
+      node.location.slice.include?("\t") ? "\t" : " "
     end
   end
 end
