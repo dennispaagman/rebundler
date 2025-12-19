@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rebundler (0.3.0)
+    rebundler (0.3.1)
 
 GEM
   remote: https://rubygems.org/

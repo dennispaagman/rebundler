@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.3.1] - 2025-12-19
+
+- Fixed bug where comment on last gem in a block was not overwritten.
+
 ## [0.3.0] - 2025-12-18
 
 - Add support for tabs instead of spaces.
