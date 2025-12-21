@@ -4,13 +4,15 @@ require "prism"
 
 module Rebundler
   class Parser
-    attr_reader :file, :preamble_nodes, :gem_sets, :frozen_string_literal
+    attr_reader :file, :preamble_nodes, :gem_sets, :frozen_string_literal, :force, :comments
 
-    def initialize(file)
+    def initialize(file, force: false)
       @file = file
+      @force = force
       @frozen_string_literal = false
       @preamble_nodes = []
       @gem_sets = [GemSet.new(default: true)] # all gems outside a specific block (group, source, etc) will end up here
+      @comments = []
     end
 
     def build_set(name:, node: nil)
@@ -25,6 +27,7 @@ module Rebundler
       parsed = Prism.parse(File.read(file))
 
       @frozen_string_literal = parsed.magic_comments.map(&:key).include?("frozen_string_literal")
+      @comments = parsed.comments
 
       visitor = Visitor.new(self)
       parsed.value.accept(visitor)

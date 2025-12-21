@@ -18,7 +18,6 @@ This is a real life example from my own project. That looks a lot better, doesn'
 
 ## Known limitations
 
-- **Existing comments will be lost.** At this moment Rebundler does not persist existing comments.
 - **Probably does not work with all possible Gemfile configurations.** It is designed to work with the most common setups right now. If you encounter an issue, please open an issue on GitHub. I strive to support each sensible configuration.
 
 ## Installation
@@ -67,6 +66,16 @@ of the current Gemfile to a freshly formatted one.
 If there are differences, rebundler will exit with a non-zero status code.
 
 This does not write to the Gemfile.
+
+## Options
+
+### `--force`
+
+By default, Rebundler preserves existing trailing comments on `gem` defining lines. If you want to overwrite them anyway, use the `--force` flag:
+
+```sh
+$ bundle exec rebundle --force
+```
 
 ## Development
 

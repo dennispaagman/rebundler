@@ -15,18 +15,6 @@ class TestParserGemVariants < Minitest::Test
     end
   end
 
-  def test_gem_with_existing_comment
-    gemfile = <<~GEMFILE
-      gem "rubocop" # Style police
-    GEMFILE
-
-    with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
-        gem "rubocop" # Automatic Ruby code style checking tool.
-      GEMFILE
-    end
-  end
-
   def test_gem_with_require_boolean
     gemfile = <<~GEMFILE
       gem "rubocop", require: false

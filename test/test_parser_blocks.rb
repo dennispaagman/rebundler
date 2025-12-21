@@ -19,26 +19,6 @@ class TestParserBlocks < Minitest::Test
     end
   end
 
-  def test_gemfile_with_group_block_with_existing_comment
-    gemfile = <<~GEMFILE
-      gem "minitest"
-
-      group :development do
-        gem "rubocop" # Style police
-      end
-    GEMFILE
-
-    with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
-        gem "minitest" # minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking
-
-        group :development do
-          gem "rubocop" # Automatic Ruby code style checking tool.
-        end
-      GEMFILE
-    end
-  end
-
   def test_gemfile_with_group_block_with_multiple
     gemfile = <<~GEMFILE
       group :development, :test do

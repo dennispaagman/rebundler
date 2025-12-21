@@ -11,11 +11,9 @@ module Rebundler
     def visit_call_node(node)
       case node.name
       when :plugin
-        parsed_gem = GemFetcher.parse_gem(node)
-        @current_set.plugins << parsed_gem if parsed_gem
+        @current_set.plugins << parse_gem_with_comment(node)
       when :gem
-        parsed_gem = GemFetcher.parse_gem(node)
-        @current_set.gems << parsed_gem if parsed_gem
+        @current_set.gems << parse_gem_with_comment(node)
       when :git_source
         @parser.preamble_nodes << node
       when *BLOCK_NODES
@@ -31,6 +29,22 @@ module Rebundler
           @parser.preamble_nodes << node
         end
       end
+    end
+
+    private
+
+    def parse_gem_with_comment(node)
+      existing_comment = Serializer.extract_comment(node, @parser.comments)
+
+      # If there's an existing comment and we're not forcing, use it without fetching
+      if existing_comment && !@parser.force
+        gem_name = node.arguments.child_nodes[0].content
+
+        return { name: gem_name, summary: existing_comment, node: }
+      end
+
+      # Otherwise, fetch the gem info (which includes summary)
+      GemFetcher.parse_gem(node)
     end
   end
 end

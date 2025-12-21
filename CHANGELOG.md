@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.4.0] - 2025-12-21
+
+- **Breaking** Rebundler now leaves existing trailing comments intact.
+
+  You can still overwrite them (the previous behavior) by using the `--force` flag.
+
 ## [0.3.1] - 2025-12-19
 
 - Fixed bug where comment on last gem in a block was not overwritten.

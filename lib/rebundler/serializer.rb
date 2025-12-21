@@ -2,6 +2,22 @@
 
 module Rebundler
   class Serializer
+    def self.extract_comment(node, comments)
+      # Find comments that are on the same line as the node
+      node_line = node.location.end_line
+
+      trailing_comment = comments.find do |comment|
+        comment.location.start_line == node_line &&
+          comment.location.start_offset > node.location.end_offset
+      end
+
+      return nil unless trailing_comment
+
+      # Get the comment text (without the # prefix)
+      comment_text = trailing_comment.location.slice.sub(/^#\s*/, "").strip
+      comment_text.empty? ? nil : comment_text
+    end
+
     def self.node_to_s(node)
       lines = node.location.slice.lines
 

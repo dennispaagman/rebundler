@@ -20,9 +20,9 @@ def with_temporary_gemfile(content, &)
   end
 end
 
-def with_parsed_gemfile(content, &)
+def with_parsed_gemfile(content, force: false, &)
   with_temporary_gemfile(content) do |file|
-    parser = Rebundler::Parser.new(file.path)
+    parser = Rebundler::Parser.new(file.path, force:)
 
     yield parser
   end

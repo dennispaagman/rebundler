@@ -5,6 +5,7 @@ require_relative "../lib/rebundler"
 
 # Parse command line arguments
 ci_mode = ARGV.include?("--ci")
+force = ARGV.include?("--force")
 file = ARGV.reject { |arg| arg.start_with?("--") }[0] || (Dir.pwd + "/Gemfile")
 
 puts "Reordering and annotating Gemfile..."
@@ -13,7 +14,7 @@ begin
   # Load all gems in the Gemfile so we can use them to grab the summary instead of
   # having to hit rubygems.org
   Bundler.setup
-  parser = Rebundler::Parser.new(file)
+  parser = Rebundler::Parser.new(file, force:)
   new_content = parser.parse_and_write!
 
   if ci_mode
