@@ -4,44 +4,44 @@ require "prism"
 
 module Rebundler
   class Parser
-    attr_reader :file, :preamble_nodes, :gem_sets, :frozen_string_literal, :force, :comments
+    attr_reader :content, :frozen_string_literal, :directives, :gem_sets, :comments
 
-    def initialize(file, force: false)
-      @file = file
-      @force = force
+    def self.from_file(path)
+      raise Rebundler::Error, "File not found: #{path}" unless File.exist?(path)
+
+      new(File.read(path))
+    end
+
+    def self.from_string(content)
+      new(content)
+    end
+
+    def format(overwrite_comments: false)
+      Formatter.new(self).format(overwrite_comments:)
+    end
+
+    private_class_method :new
+
+    def initialize(content)
+      @content = content
       @frozen_string_literal = false
-      @preamble_nodes = []
-      @gem_sets = [GemSet.new(default: true)] # all gems outside a specific block (group, source, etc) will end up here
+      @directives = []
+      @gem_sets = [GemSet.new(default: true)]
       @comments = []
+
+      parse!
     end
 
-    def build_set(name:, node: nil)
-      GemSet.new(name:, node:).tap do |set|
-        @gem_sets << set
-      end
-    end
+    private
 
     def parse!
-      return if @parsed
-
-      parsed = Prism.parse(File.read(file))
+      parsed = Prism.parse(@content)
 
       @frozen_string_literal = parsed.magic_comments.map(&:key).include?("frozen_string_literal")
       @comments = parsed.comments
 
       visitor = Visitor.new(self)
       parsed.value.accept(visitor)
-
-      @parsed = true
-    end
-
-    def parse_and_write!
-      parse!
-      Writer.new(self).write!
-    end
-
-    def find_or_build_set(name:, node: nil)
-      gem_sets.find { |set| set.name == name } || build_set(name:, node:)
     end
   end
 end

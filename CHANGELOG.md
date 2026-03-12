@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+- Major internal refactor and clean up.
+
 ## [0.4.0] - 2025-12-21
 
 - **Breaking** Rebundler now leaves existing trailing comments intact.

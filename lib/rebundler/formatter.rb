@@ -3,31 +3,36 @@
 require "forwardable"
 
 module Rebundler
-  class Writer
+  class Formatter
     extend Forwardable
 
-    def_delegators :@parser, :preamble_nodes, :gem_sets, :frozen_string_literal
+    def_delegators :@parser, :directives, :gem_sets, :frozen_string_literal, :comments
 
     def initialize(parser)
       @parser = parser
     end
 
-    def write!
+    def format(overwrite_comments: false)
       buffer = []
 
       buffer << "# frozen_string_literal: true" if frozen_string_literal
 
-      preamble_nodes.each do |node|
+      directives.each do |node|
         buffer << Serializer.node_to_s(node)
       end
 
       gem_sets.sort.each do |set|
         gem_content = [set.plugins, set.gems].map do |nodes|
-          sorted = nodes.sort_by { |node| node[:name].tr("-_", "").downcase }
+          nodes.sort.map do |gem|
+            existing_comment = Serializer.extract_comment(gem.node, comments)
+            comment = if existing_comment && !overwrite_comments
+                        existing_comment
+                      else
+                        gem.summary
+                      end
 
-          sorted.map do |gem|
-            line = +Serializer.node_to_s(gem[:node])
-            line << " # #{gem[:summary]}" if gem[:summary]
+            line = +Serializer.node_to_s(gem.node)
+            line << " # #{comment}" if comment
             line
           end.join("\n")
         end.reject(&:empty?).join("\n\n")

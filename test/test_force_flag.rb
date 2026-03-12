@@ -8,8 +8,8 @@ class TestForceFlag < Minitest::Test
       gem "rubocop" # Style police
     GEMFILE
 
-    with_parsed_gemfile(gemfile, force: true) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.format(overwrite_comments: true)
         gem "rubocop" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -21,7 +21,7 @@ class TestForceFlag < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         gem "rubocop" # My custom comment
       GEMFILE
     end
@@ -33,7 +33,7 @@ class TestForceFlag < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         gem "rubocop" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -45,7 +45,7 @@ class TestForceFlag < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         gem "rubocop" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -56,8 +56,8 @@ class TestForceFlag < Minitest::Test
       gem "rubocop" #
     GEMFILE
 
-    with_parsed_gemfile(gemfile, force: true) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.format(overwrite_comments: true)
         gem "rubocop" # Automatic Ruby code style checking tool.
       GEMFILE
     end
@@ -71,7 +71,7 @@ class TestForceFlag < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         group :development do
           gem "rubocop" # Custom style checker
         end
@@ -86,7 +86,7 @@ class TestForceFlag < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         gem "minitest" # Keep this
         gem "rubocop" # Automatic Ruby code style checking tool.
       GEMFILE

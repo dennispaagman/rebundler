@@ -56,6 +56,8 @@ This does **not** load the plugin and means you have to run rebundler yourself b
 
 ```sh
 $ bundle exec rebundle
+Reordering and annotating Gemfile...
+✓ Gemfile has been reordered and annotated
 ```
 
 ### 3. CI mode
@@ -75,6 +77,39 @@ By default, Rebundler preserves existing trailing comments on `gem` defining lin
 
 ```sh
 $ bundle exec rebundle --force
+```
+
+## Interface
+
+You can use Rebundler directly in Ruby rather than via the CLI.
+
+### `Parser.from_file(path)`
+
+Parses a Gemfile at the given path and returns a `Parser` instance.
+
+```ruby
+parser = Rebundler::Parser.from_file("/path/to/Gemfile")
+```
+
+Raises `Rebundler::Error` if the file does not exist.
+
+### `Parser.from_string(content)`
+
+Parses a Gemfile from a string and returns a `Parser` instance. Useful for testing or processing Gemfile content you already have in memory.
+
+```ruby
+content = File.read("/path/to/Gemfile")
+parser = Rebundler::Parser.from_string(content)
+```
+
+### `parser.format(overwrite_comments: false)`
+
+Returns the formatted Gemfile content as a string. Does not write to disk.
+
+Pass `overwrite_comments: true` to replace existing trailing comments on `gem` lines (equivalent to the `--force` CLI flag):
+
+```ruby
+new_content = parser.format(overwrite_comments: true)
 ```
 
 ## Development

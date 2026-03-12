@@ -9,7 +9,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         source "https://rubygems.org"
       GEMFILE
     end
@@ -21,7 +21,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         ruby "3.2.0"
       GEMFILE
     end
@@ -33,7 +33,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         ruby "3.2.0", engine: "ruby", engine_version: "3.2.0"
       GEMFILE
     end
@@ -45,7 +45,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         ruby file: ".ruby-version"
       GEMFILE
     end
@@ -57,7 +57,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         gemspec
       GEMFILE
     end
@@ -69,7 +69,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         gemspec name: "my_gem", path: "../", development_group: :dev
       GEMFILE
     end
@@ -83,7 +83,7 @@ class TestDirectives < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         # frozen_string_literal: true
 
         gem "rubocop" # Automatic Ruby code style checking tool.
@@ -95,14 +95,14 @@ class TestDirectives < Minitest::Test
     gemfile = <<~'GEMFILE'
       git_source(:bc) { |repo| "https://github.com/basecamp/#{repo}" }
 
-      gem "rails"
+      gem "rubocop"
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~'GEMFILE', parser.parse_and_write!
+      assert_equal <<~'GEMFILE', parser.format
         git_source(:bc) { |repo| "https://github.com/basecamp/#{repo}" }
 
-        gem "rails" # Full-stack web application framework.
+        gem "rubocop" # Automatic Ruby code style checking tool.
       GEMFILE
     end
   end

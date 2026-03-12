@@ -5,34 +5,35 @@ require_relative "../lib/rebundler"
 
 # Parse command line arguments
 ci_mode = ARGV.include?("--ci")
-force = ARGV.include?("--force")
+overwrite_comments = ARGV.include?("--force")
 file = ARGV.reject { |arg| arg.start_with?("--") }[0] || (Dir.pwd + "/Gemfile")
-
-puts "Reordering and annotating Gemfile..."
 
 begin
   # Load all gems in the Gemfile so we can use them to grab the summary instead of
   # having to hit rubygems.org
   Bundler.setup
-  parser = Rebundler::Parser.new(file, force:)
-  new_content = parser.parse_and_write!
+  parser = Rebundler::Parser.from_file(file)
+  new_content = parser.format(overwrite_comments:)
 
   if ci_mode
     # In CI mode, compare the new content with the existing file
+    puts "Checking if Gemfile is properly formatted..."
     current_content = File.read(file)
 
     if new_content == current_content
-      puts "✓ Gemfile is already properly formatted"
+      puts "\e[32m✓ Gemfile is properly formatted\e[0m"
       exit 0
     else
-      puts "✗ Gemfile is not properly formatted"
-      puts "Run 'rebundle' to fix formatting issues"
+      puts "\e[31m✗ Gemfile is not properly formatted\e[0m"
+      puts "Run `bundle exec rebundle` to fix formatting issues"
       exit 1
     end
   else
     # In normal mode, write the new content to the file
+    puts "Reordering and annotating Gemfile..."
     File.write(file, new_content)
-    puts "✓ Gemfile has been reordered and annotated"
+    puts "\e[32m✓ Gemfile has been reordered and annotated\e[0m"
+
   end
 rescue StandardError => e
   puts "Error parsing Gemfile: #{e.message}"

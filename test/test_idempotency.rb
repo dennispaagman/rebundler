@@ -11,7 +11,7 @@ class TestIdempotency < Minitest::Test
     parsed_gemfile = nil
 
     with_parsed_gemfile(gemfile) do |parser|
-      parsed_gemfile = parser.parse_and_write!
+      parsed_gemfile = parser.format
 
       assert_equal <<~GEMFILE, parsed_gemfile
         gem "rubocop" # Automatic Ruby code style checking tool.
@@ -20,7 +20,7 @@ class TestIdempotency < Minitest::Test
 
     # Do another pass.
     with_parsed_gemfile(parsed_gemfile) do |parser|
-      assert_equal parsed_gemfile, parser.parse_and_write!
+      assert_equal parsed_gemfile, parser.format
     end
   end
 end

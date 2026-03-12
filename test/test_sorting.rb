@@ -10,7 +10,7 @@ class TestSorting < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      assert_equal <<~GEMFILE, parser.parse_and_write!
+      assert_equal <<~GEMFILE, parser.format
         gem "debug" # Debugging functionality for Ruby
         gem "rubocop" # Automatic Ruby code style checking tool.
       GEMFILE
@@ -25,13 +25,11 @@ class TestSorting < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      Rebundler::GemFetcher.stub(:find_external_gem_summary, nil) do
-        assert_equal <<~GEMFILE, parser.parse_and_write!
-          gem "something"
-          gem "something-alpha"
-          gem "something_beta"
-        GEMFILE
-      end
+      assert_equal <<~GEMFILE, parser.format
+        gem "something"
+        gem "something-alpha"
+        gem "something_beta"
+      GEMFILE
     end
   end
 
@@ -47,16 +45,14 @@ class TestSorting < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      Rebundler::GemFetcher.stub(:find_external_gem_summary, nil) do
-        assert_equal <<~GEMFILE, parser.parse_and_write!
-          gem "debug" # Debugging functionality for Ruby
-          gem "rubocop" # Automatic Ruby code style checking tool.
+      assert_equal <<~GEMFILE, parser.format
+        gem "debug" # Debugging functionality for Ruby
+        gem "rubocop" # Automatic Ruby code style checking tool.
 
-          group :development do
-            gem "rake" # Rake is a Make-like program implemented in Ruby
-          end
-        GEMFILE
-      end
+        group :development do
+          gem "rake" # Rake is a Make-like program implemented in Ruby
+        end
+      GEMFILE
     end
   end
 
@@ -72,14 +68,12 @@ class TestSorting < Minitest::Test
     GEMFILE
 
     with_parsed_gemfile(gemfile) do |parser|
-      Rebundler::GemFetcher.stub(:find_external_gem_summary, nil) do
-        assert_equal <<~GEMFILE, parser.parse_and_write!
-          group :development do
-            gem "rake" # Rake is a Make-like program implemented in Ruby
-            gem "rubocop" # Automatic Ruby code style checking tool.
-          end
-        GEMFILE
-      end
+      assert_equal <<~GEMFILE, parser.format
+        group :development do
+          gem "rake" # Rake is a Make-like program implemented in Ruby
+          gem "rubocop" # Automatic Ruby code style checking tool.
+        end
+      GEMFILE
     end
   end
 end

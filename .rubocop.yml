@@ -23,3 +23,6 @@ Style/StringConcatenation:
 
 Layout/LineLength:
   Enabled: false
+
+Lint/ItWithoutArgumentsInBlock:
+  Enabled: false

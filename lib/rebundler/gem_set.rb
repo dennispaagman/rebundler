@@ -16,14 +16,14 @@ module Rebundler
     end
 
     def <=>(other)
-      return nil unless other.is_a?(GemSet)
+      raise ArgumentError, "comparison of GemSet with #{other.class} failed" unless other.is_a?(GemSet)
 
       # Default first, then sort by name
-      [default ? 0 : 1, name] <=> [other.default ? 0 : 1, other.name]
+      [default ? 0 : 1, name.to_s] <=> [other.default ? 0 : 1, other.name.to_s]
     end
 
     def ==(other)
-      other.is_a?(GemSet) && other.name == name
+      other.is_a?(GemSet) && other.name == name && other.default == default
     end
   end
 end

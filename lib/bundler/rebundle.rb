@@ -25,8 +25,8 @@ module Bundler
         # having to hit rubygems.org
         Bundler.setup
 
-        parser = ::Rebundler::Parser.new(file)
-        content = parser.parse_and_write!
+        parser = ::Rebundler::Parser.from_file(file)
+        content = parser.format
 
         # Use atomic write to prevent corruption if write fails
         Tempfile.create("Gemfile", Bundler.root.to_s) do |tmp|
