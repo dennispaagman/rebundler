@@ -15,6 +15,12 @@ GEM
       pretty_please
     difftastic (0.7.0-arm64-darwin)
       pretty_please
+    difftastic (0.7.0-arm64-linux)
+      pretty_please
+    difftastic (0.7.0-x86_64-darwin)
+      pretty_please
+    difftastic (0.7.0-x86_64-linux)
+      pretty_please
     dispersion (0.2.0)
       prism
     erb (6.0.1)
@@ -89,8 +95,11 @@ GEM
     zeitwerk (2.7.4)
 
 PLATFORMS
-  arm64-darwin-23
+  arm64-darwin
+  arm64-linux
   ruby
+  x86_64-darwin
+  x86_64-linux
 
 DEPENDENCIES
   debug
