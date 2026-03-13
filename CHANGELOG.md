@@ -1,6 +1,9 @@
-## [Unreleased]
+## [0.5.0] - 2026-03-13
 
 - Major internal refactor and clean up.
+
+  You can now instantiate the parser via `Rebundler::Parser.from_file(path)` or directly
+  from a string via `Rebundler::Parser.from_string(content)`.
 
 ## [0.4.0] - 2025-12-21
 

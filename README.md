@@ -69,7 +69,7 @@ If there are differences, rebundler will exit with a non-zero status code.
 
 This does not write to the Gemfile.
 
-## Options
+### Options
 
 ### `--force`
 
@@ -81,7 +81,7 @@ $ bundle exec rebundle --force
 
 ## Interface
 
-You can use Rebundler directly in Ruby rather than via the CLI.
+You can also use Rebundler directly in Ruby rather than via the CLI.
 
 ### `Parser.from_file(path)`
 
@@ -91,11 +91,9 @@ Parses a Gemfile at the given path and returns a `Parser` instance.
 parser = Rebundler::Parser.from_file("/path/to/Gemfile")
 ```
 
-Raises `Rebundler::Error` if the file does not exist.
-
 ### `Parser.from_string(content)`
 
-Parses a Gemfile from a string and returns a `Parser` instance. Useful for testing or processing Gemfile content you already have in memory.
+Parses a Gemfile from a string and returns a `Parser` instance.
 
 ```ruby
 content = File.read("/path/to/Gemfile")
