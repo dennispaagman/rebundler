@@ -23,6 +23,7 @@ GEM
       pretty_please
     dispersion (0.2.0)
       prism
+    drb (2.2.3)
     erb (6.0.1)
     io-console (0.8.2)
     irb (1.16.0)
@@ -33,7 +34,9 @@ GEM
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
-    minitest (5.27.0)
+    minitest (6.0.2)
+      drb (~> 2.0)
+      prism (~> 1.5)
     minitest-difftastic (0.2.1)
       difftastic (~> 0.6)
     parallel (1.27.0)
@@ -103,7 +106,7 @@ PLATFORMS
 
 DEPENDENCIES
   debug
-  minitest (~> 5.27)
+  minitest (~> 6.0)
   minitest-difftastic
   rake (~> 13.3)
   rebundler!

@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 gem "debug" # Debugging functionality for Ruby
-gem "minitest", "~> 5.27" # minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking
+gem "minitest", "~> 6.0" # minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking
 gem "minitest-difftastic" # Minitest Plugin to use difftastic for failed assertions
 gem "rake", "~> 13.3" # Rake is a Make-like program implemented in Ruby
 gem "rebundler", path: "." # Rebundler makes your Gemfile look good.
