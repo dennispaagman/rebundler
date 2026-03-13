@@ -1,3 +1,8 @@
+## [0.5.1] - 2026-03-13
+
+- Remove references to running as a bundler plugin. This does not work well, so decided to remove it.
+- Fixed Ruby 3.3 support.
+
 ## [0.5.0] - 2026-03-13
 
 - Major internal refactor and clean up.
