@@ -18,41 +18,15 @@ This is a real life example from my own project. That looks a lot better, doesn'
 
 ## Known limitations
 
-- **Probably does not work with all possible Gemfile configurations.** It is designed to work with the most common setups right now. If you encounter an issue, please open an issue on GitHub. I strive to support each sensible configuration.
+- **Probably does not work with all possible Gemfile configurations.** It is designed to work with the most common setups right now. If you encounter an issue, please open an issue on GitHub. I strive to support most sensible configurations.
 
 ## Installation
 
-There are two ways to install Rebundler.
+First add `rebundler` to your Gemfile. `bundle add rebundler`. There are two ways to run Rebundler.
 
-### 1. Automatic mode
+### 1. Writing mode
 
-> [!NOTE]
-> This does not seem to work properly yet, I need to dig into why later.
-
-Simply add them gem to your Gemfile. the location does not matter as it will be resorted immediately.
-
-```ruby
-gem "rebundler"
-```
-
-This installs a Bundler plugin that automatically runs after installing gems. You should see a message in your terminal after running `bundle`:
-
-```sh
-$ bundle
-
-...
-
-Reordering and annotating Gemfile...
-Bundle complete! 10 Gemfile dependencies, 45 gems now installed.
-```
-
-### 2. Manual mode
-
-```ruby
-gem "rebundler", require: false
-```
-
-This does **not** load the plugin and means you have to run rebundler yourself by running the `rebundle` command:
+If you run `bundle exec rebundle`, rebundler will reorder and annotate your Gemfile.
 
 ```sh
 $ bundle exec rebundle
@@ -60,7 +34,7 @@ Reordering and annotating Gemfile...
 ✓ Gemfile has been reordered and annotated
 ```
 
-### 3. CI mode
+### 2. CI mode
 
 If you run `bundle exec rebundle --ci`, rebundler will run in CI mode, which will compare the output
 of the current Gemfile to a freshly formatted one.
@@ -68,6 +42,12 @@ of the current Gemfile to a freshly formatted one.
 If there are differences, rebundler will exit with a non-zero status code.
 
 This does not write to the Gemfile.
+
+```sh
+❯ bundle exec rebundle --ci
+Checking if Gemfile is properly formatted...
+✓ Gemfile is properly formatted
+```
 
 ### Options
 
