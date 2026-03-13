@@ -41,7 +41,7 @@ module Rebundler
 
     def self.find_spacing_character(node)
       # Assume it's formatted with tabs if ANY line starts with a tab.
-      any_line_starts_with_tab = node.location.slice.split("\n").any? { it.start_with?("\t") }
+      any_line_starts_with_tab = node.location.slice.split("\n").any? { |line| line.start_with?("\t") }
 
       any_line_starts_with_tab ? "\t" : " "
     end
