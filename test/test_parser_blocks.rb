@@ -181,7 +181,7 @@ class TestParserBlocks < Minitest::Test
         end
 
         group :test do
-          gem "minitest" # minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking
+          gem "minitest" # minitest provides a complete suite of testing facilities supporting TDD, BDD, and benchmarking
         end
       GEMFILE
     end
@@ -213,7 +213,7 @@ class TestParserBlocks < Minitest::Test
         end
 
         group :test do
-          gem "minitest" # minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking
+          gem "minitest" # minitest provides a complete suite of testing facilities supporting TDD, BDD, and benchmarking
         end
       GEMFILE
     end
