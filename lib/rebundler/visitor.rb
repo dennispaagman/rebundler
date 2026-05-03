@@ -11,9 +11,9 @@ module Rebundler
     def visit_call_node(node)
       case node.name
       when :plugin
-        @current_set.plugins << parse_gem_with_comment(node)
+        @current_set.plugins << GemDeclaration.new(node:)
       when :gem
-        @current_set.gems << parse_gem_with_comment(node)
+        @current_set.gems << GemDeclaration.new(node:)
       when :git_source
         # :git_source is a special case where it's a directive with a block that
         # we don't want to add it as a set, which would happen if it's parsed in
@@ -46,13 +46,6 @@ module Rebundler
       GemSet.new(name:, node:).tap do |set|
         @parser.gem_sets << set
       end
-    end
-
-    def parse_gem_with_comment(node)
-      name = node.arguments.child_nodes[0].content
-      summary = Summarizer.summarize(name)
-
-      GemDeclaration.new(name:, summary:, node:)
     end
   end
 end
