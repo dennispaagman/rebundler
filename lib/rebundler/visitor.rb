@@ -15,6 +15,9 @@ module Rebundler
       when :gem
         @current_set.gems << parse_gem_with_comment(node)
       when :git_source
+        # :git_source is a special case where it's a directive with a block that
+        # we don't want to add it as a set, which would happen if it's parsed in
+        # the condition for DIRECTIVE_AND_BLOCK_NODES below.
         @parser.directives << node
       when *DIRECTIVE_AND_BLOCK_NODES
         if node.block

@@ -106,4 +106,20 @@ class TestDirectives < Minitest::Test
       GEMFILE
     end
   end
+
+  def test_install_if
+    gemfile = <<~GEMFILE
+      install_if -> { RUBY_PLATFORM =~ /darwin/ } do
+        gem "rubocop"
+      end
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal <<~GEMFILE, parser.format
+        install_if -> { RUBY_PLATFORM =~ /darwin/ } do
+          gem "rubocop" # Automatic Ruby code style checking tool.
+        end
+      GEMFILE
+    end
+  end
 end
