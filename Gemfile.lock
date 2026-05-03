@@ -40,7 +40,6 @@ GEM
       prism (~> 1.5)
     minitest-difftastic (0.2.1)
       difftastic (~> 0.6)
-    minitest-mock (5.27.0)
     minitest-stub_any_instance (1.0.3)
     parallel (2.1.0)
     parser (3.3.11.1)
@@ -113,8 +112,7 @@ DEPENDENCIES
   debug
   minitest
   minitest-difftastic
-  minitest-mock
-  minitest-stub_any_instance (~> 1.0)
+  minitest-stub_any_instance
   rake
   rebundler!
   rubocop

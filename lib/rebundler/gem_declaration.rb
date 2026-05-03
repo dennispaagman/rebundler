@@ -14,7 +14,11 @@ module Rebundler
     def normalized_name = name.tr("-_", "").downcase
 
     def summary
-      @summary ||= find_loaded_gem_summary(name) || find_external_gem_summary(name)
+      gem = find_loaded_gem || find_external_gem
+
+      return if gem.nil?
+
+      gem.summary == "" ? gem.description : gem.summary
     end
 
     def <=>(other)
@@ -28,20 +32,18 @@ module Rebundler
 
     private
 
-    def find_loaded_gem_summary(name)
-      gem = Gem::Specification.find_by_name(name)
-
-      gem.summary
+    def find_loaded_gem
+      Gem::Specification.find_by_name(name)
     rescue Gem::MissingSpecError
       nil
     end
 
-    def find_external_gem_summary(name)
+    def find_external_gem
       spec = Gem::SpecFetcher.fetcher.spec_for_dependency(Gem::Dependency.new(name))
 
       return if spec.nil? || spec.first.empty?
 
-      spec.first.first.first.summary
+      spec.first.first.first
     rescue SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT, Timeout::Error => e
       raise Rebundler::Error, "Network error while fetching gem info for '#{name}': #{e.message}"
     end

@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gem "debug" # Debugging functionality for Ruby
 gem "minitest" # minitest provides a complete suite of testing facilities supporting TDD, BDD, and benchmarking
 gem "minitest-difftastic" # Minitest Plugin to use difftastic for failed assertions
-gem "minitest-mock" # minitest/mock, by Steven Baker, is a beautifully tiny mock (and stub) object framework
+gem "minitest-stub_any_instance" # Adds a method to MiniTest that stubs any instance of a class.
 gem "rake" # Rake is a Make-like program implemented in Ruby
 gem "rebundler", path: "." # Rebundler makes your Gemfile look good.
 gem "rubocop" # Automatic Ruby code style checking tool.
@@ -13,5 +13,3 @@ gem "rubocop-minitest" # Automatic Minitest code style checking tool.
 gem "rubocop-rake" # A RuboCop plugin for Rake
 gem "ruby-lsp" # An opinionated language server for Ruby
 gem "zeitwerk" # Efficient and thread-safe constant autoloader
-
-gem "minitest-stub_any_instance"
