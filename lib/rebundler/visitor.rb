@@ -21,6 +21,8 @@ module Rebundler
         @parser.directives << node
       when *DIRECTIVE_AND_BLOCK_NODES
         if node.block
+          return unless node.block.body
+
           # Use the full block declaration (e.g., "group :development do") as the unique name
           name = node.location.slice.lines.first.strip
 
