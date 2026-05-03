@@ -235,4 +235,16 @@ class TestParserBlocks < Minitest::Test
       GEMFILE
     end
   end
+
+  def test_empty_group
+    gemfile = <<~GEMFILE
+      group :development do
+        # gem "pg"
+      end
+    GEMFILE
+
+    with_parsed_gemfile(gemfile) do |parser|
+      assert_equal "\n", parser.format
+    end
+  end
 end
