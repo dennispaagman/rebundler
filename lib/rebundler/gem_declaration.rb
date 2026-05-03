@@ -1,31 +1,34 @@
 # frozen_string_literal: true
 
-require "timeout"
-
 module Rebundler
-  class GemDeclaration < Data.define(:name, :node)
+  class GemDeclaration
     include Comparable
 
-    def initialize(name:, node:)
-      @memo = {}
-      super
+    attr_reader :node
+
+    def initialize(node: nil)
+      @node = node
     end
 
+    def name = @node.arguments.child_nodes[0].content
+    def normalized_name = name.tr("-_", "").downcase
+
     def summary
-      @memo[:summary] ||= self.class.find_loaded_gem_summary(name) || self.class.find_external_gem_summary(name)
+      @summary ||= find_loaded_gem_summary(name) || find_external_gem_summary(name)
     end
 
     def <=>(other)
-      raise ArgumentError, "comparison of GemDeclaration with #{other.class} failed" unless other.is_a?(GemDeclaration)
+      unless other.is_a?(GemDeclaration)
+        raise ArgumentError,
+              "comparison of GemDeclaration with #{other.class} failed"
+      end
 
       normalized_name <=> other.normalized_name
     end
 
-    def normalized_name
-      name.tr("-_", "").downcase
-    end
+    private
 
-    def self.find_loaded_gem_summary(name)
+    def find_loaded_gem_summary(name)
       gem = Gem::Specification.find_by_name(name)
 
       gem.summary
@@ -33,8 +36,8 @@ module Rebundler
       nil
     end
 
-    def self.find_external_gem_summary(name)
-      spec = Gem::SpecFetcher.fetcher.spec_for_dependency Gem::Dependency.new(name)
+    def find_external_gem_summary(name)
+      spec = Gem::SpecFetcher.fetcher.spec_for_dependency(Gem::Dependency.new(name))
 
       return if spec.nil? || spec.first.empty?
 

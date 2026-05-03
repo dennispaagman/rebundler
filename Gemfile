@@ -13,3 +13,5 @@ gem "rubocop-minitest" # Automatic Minitest code style checking tool.
 gem "rubocop-rake" # A RuboCop plugin for Rake
 gem "ruby-lsp" # An opinionated language server for Ruby
 gem "zeitwerk" # Efficient and thread-safe constant autoloader
+
+gem "minitest-stub_any_instance"
