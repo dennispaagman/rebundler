@@ -50,9 +50,7 @@ module Rebundler
 
     def parse_gem_with_comment(node)
       name = node.arguments.child_nodes[0].content
-      summary = Summarizer.summarize(name)
-
-      GemDeclaration.new(name:, summary:, node:)
+      GemDeclaration.new(name:, node:)
     end
   end
 end

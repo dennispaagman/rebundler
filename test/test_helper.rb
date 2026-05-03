@@ -7,7 +7,7 @@ require "minitest/autorun"
 require "minitest/mock"
 
 def with_parsed_gemfile(content, external_summary: nil, &)
-  Rebundler::Summarizer.stub(:find_external_gem_summary, external_summary) do
+  Rebundler::GemDeclaration.stub(:find_external_gem_summary, external_summary) do
     yield Rebundler::Parser.from_string(content)
   end
 end
