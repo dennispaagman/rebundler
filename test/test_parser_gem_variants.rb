@@ -279,6 +279,31 @@ class TestParserGemVariants < Minitest::Test
     end
   end
 
+  def test_falls_back_to_description_when_summary_missing
+    gemfile = <<~GEMFILE
+      gem "phlex"
+    GEMFILE
+
+    with_parsed_gemfile(gemfile, description: "Object-oriented views in Ruby.") do |parser|
+      assert_equal <<~GEMFILE, parser.format
+        gem "phlex" # Object-oriented views in Ruby.
+      GEMFILE
+    end
+  end
+
+  def test_prefers_summary_over_description
+    gemfile = <<~GEMFILE
+      gem "phlex"
+    GEMFILE
+
+    with_parsed_gemfile(gemfile, summary: "Object-oriented views in Ruby.",
+                                 description: "A longer description.") do |parser|
+      assert_equal <<~GEMFILE, parser.format
+        gem "phlex" # Object-oriented views in Ruby.
+      GEMFILE
+    end
+  end
+
   def test_plugin
     gemfile = <<~GEMFILE
       plugin "rubocop"

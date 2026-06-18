@@ -18,7 +18,11 @@ module Rebundler
 
       return if gem.nil?
 
-      gem.summary == "" ? gem.description : gem.summary
+      if gem.summary.nil? || gem.summary == ""
+        gem.description
+      else
+        gem.summary
+      end
     end
 
     def <=>(other)
