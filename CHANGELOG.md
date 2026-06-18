@@ -1,3 +1,9 @@
+## [0.6.1] - 2026-06-18
+
+- Include pre-release versions when fetching external gem info, so gems published only
+  as pre-releases (e.g. `typesense-rails`) are found and get a generated trailing
+  comment. Stable gems still resolve to their latest stable version.
+
 ## [0.6.0] - 2026-06-18
 
 - Add support for the `install_if` directive. `install_if` blocks are now parsed and
