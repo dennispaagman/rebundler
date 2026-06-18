@@ -2,6 +2,8 @@ PATH
   remote: .
   specs:
     rebundler (0.5.1)
+      prism (~> 1.9)
+      zeitwerk (~> 2.8)
 
 GEM
   remote: https://rubygems.org/
@@ -99,7 +101,7 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
-    zeitwerk (2.7.5)
+    zeitwerk (2.8.2)
 
 PLATFORMS
   arm64-darwin
