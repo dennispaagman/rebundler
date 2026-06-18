@@ -260,7 +260,7 @@ class TestParserGemVariants < Minitest::Test
       gem "phlex"
     GEMFILE
 
-    with_parsed_gemfile(gemfile, external_summary: "Object-oriented views in Ruby.") do |parser|
+    with_parsed_gemfile(gemfile, summary: "Object-oriented views in Ruby.") do |parser|
       assert_equal <<~GEMFILE, parser.format
         gem "phlex" # Object-oriented views in Ruby.
       GEMFILE
