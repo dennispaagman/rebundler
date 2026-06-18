@@ -10,19 +10,46 @@ Rebundler automatically reorders and annotates your Gemfile.
 
 ## Example
 
-This is a real life example from my own project. That looks a lot better, doesn't it?
+Take this small Gemfile:
 
-| Before                                                                                    | After                                                                                     |
-| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| ![image](https://github.com/user-attachments/assets/42a76744-111b-4f73-bc62-8723637e6655) | ![image](https://github.com/user-attachments/assets/3ea6c70e-2239-4511-9040-c4db58203ec4) |
+```ruby
+source "https://rubygems.org"
+
+gem "rails"
+gem "puma"
+gem "avo"
+
+group :development do
+  gem "herb"
+end
+```
+
+After running Rebundler, the gems are sorted, and each one is annotated with its description:
+
+```ruby
+source "https://rubygems.org"
+
+gem "avo" # Admin panel framework and Content Management System for Ruby on Rails.
+gem "puma" # A Ruby/Rack web server built for parallelism.
+gem "rails" # Full-stack web application framework.
+
+group :development do
+  gem "herb" # The modern HTML+ERB Toolchain
+end
+```
+
+## Try it online
+
+You can play around with Rebundler in the [Rebundler Playground](https://rebundler.dev/). Just paste your Gemfile and hit **Rebundle**. It encodes the Gemfile in a hash in the URL, so you can easily share the result with others.
 
 ## Known limitations
 
 - **Probably does not work with all possible Gemfile configurations.** It is designed to work with the most common setups right now. If you encounter an issue, please open an issue on GitHub. I strive to support most sensible configurations.
+- **Non-trailing comments are discarded.** Rebundler keeps existing trailing comments on `gem` lines, but standalone comments and commented-out gems are removed.
 
 ## Installation
 
-First add `rebundler` to your Gemfile. `bundle add rebundler`. There are two ways to run Rebundler.
+Add it to your Gemfile with `bundle add rebundler`, or install it standalone with `gem install rebundler`. There are two ways to run Rebundler.
 
 ### 1. Writing mode
 
@@ -89,6 +116,16 @@ Pass `overwrite_comments: true` to replace existing trailing comments on `gem` l
 ```ruby
 new_content = parser.format(overwrite_comments: true)
 ```
+
+## How it works
+
+Since Gemfiles are just regular Ruby files, Rebundler parses them with [Prism](https://github.com/ruby/prism). It walks the AST using Prism's visitor pattern to find `gem` declarations and groups, while keeping generic setup methods like `source`, `ruby`, and `git_source` at the top.
+
+Gems defined at the top level are grouped together. Gems inside blocks (like `group :development do ... end`) stay within their block, and duplicate groups are automatically merged. Within each group, gems are sorted alphabetically.
+
+Prism is only a parser, not a formatter, so Rebundler reconstructs the Gemfile with some string manipulation. Because Prism records the exact line and column of every node, Rebundler copies the original source for each gem verbatim — which keeps your existing style intact. It then loads each gem's description from your local bundle (fetching it from RubyGems if it's missing) and appends it as a trailing comment.
+
+By default, existing trailing comments are kept and other comments are discarded.
 
 ## Development
 
