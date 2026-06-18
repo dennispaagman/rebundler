@@ -43,7 +43,9 @@ module Rebundler
     end
 
     def find_external_gem
-      spec = Gem::SpecFetcher.fetcher.spec_for_dependency(Gem::Dependency.new(name))
+      dependency = Gem::Dependency.new(name).tap { |d| d.prerelease = true } # Also find prelease gems
+
+      spec = Gem::SpecFetcher.fetcher.spec_for_dependency(dependency)
 
       return if spec.nil? || spec.first.empty?
 
