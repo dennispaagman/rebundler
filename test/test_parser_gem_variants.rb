@@ -260,7 +260,9 @@ class TestParserGemVariants < Minitest::Test
       gem "phlex"
     GEMFILE
 
-    with_parsed_gemfile(gemfile, summary: "Object-oriented views in Ruby.") do |parser|
+    with_stubbed_gem(:phlex, summary: "Object-oriented views in Ruby.") do
+      parser = Rebundler::Parser.from_string(gemfile)
+
       assert_equal <<~GEMFILE, parser.format
         gem "phlex" # Object-oriented views in Ruby.
       GEMFILE
@@ -284,7 +286,9 @@ class TestParserGemVariants < Minitest::Test
       gem "phlex"
     GEMFILE
 
-    with_parsed_gemfile(gemfile, description: "Object-oriented views in Ruby.") do |parser|
+    with_stubbed_gem(:phlex, description: "Object-oriented views in Ruby.") do
+      parser = Rebundler::Parser.from_string(gemfile)
+
       assert_equal <<~GEMFILE, parser.format
         gem "phlex" # Object-oriented views in Ruby.
       GEMFILE
@@ -296,8 +300,10 @@ class TestParserGemVariants < Minitest::Test
       gem "phlex"
     GEMFILE
 
-    with_parsed_gemfile(gemfile, summary: "Object-oriented views in Ruby.",
-                                 description: "A longer description.") do |parser|
+    with_stubbed_gem(:phlex, summary: "Object-oriented views in Ruby.",
+                             description: "A longer description.") do
+      parser = Rebundler::Parser.from_string(gemfile)
+
       assert_equal <<~GEMFILE, parser.format
         gem "phlex" # Object-oriented views in Ruby.
       GEMFILE
