@@ -1,3 +1,14 @@
+## [0.6.0] - 2026-06-18
+
+- Add support for the `install_if` directive. `install_if` blocks are now parsed and
+  formatted like other directive blocks (`group`, `path`, etc.).
+- Fixed a crash when a block was empty.
+- Fall back to a gem's `description` when its `summary` is `nil` or blank, so the
+  generated trailing comment is still populated.
+- Declare `prism` and `zeitwerk` as runtime dependencies in the gemspec (they were
+  previously only in the Gemfile), fixing standalone installs of the gem.
+- Internal refactoring (inlined the summarizer into `GemDeclaration`) and dependency updates.
+
 ## [0.5.1] - 2026-03-13
 
 - Remove references to running as a bundler plugin. This does not work well, so decided to remove it.
