@@ -1,3 +1,9 @@
+## [1.0.0] - 2026-08-04
+
+Rebundler is 1.0 🎉 Read the announcement: [Introducing Rebundler](https://paagman.dev/introducing-rebundler/).
+
+No functional changes since 0.6.1; this release marks the API as stable.
+
 ## [0.6.1] - 2026-06-18
 
 - Include pre-release versions when fetching external gem info, so gems published only

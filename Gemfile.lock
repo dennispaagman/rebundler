@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rebundler (0.6.1)
+    rebundler (1.0.0)
       prism (~> 1.9)
       zeitwerk (~> 2.8)
 
